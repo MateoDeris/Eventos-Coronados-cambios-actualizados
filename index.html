@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eventos Coronados</title>
+<meta name="description" content="Eventos Coronados lleva el show a tu evento: plataforma 360°, cabina fotográfica, stand glitter y Show Depredador LED. Consultá disponibilidad.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="/img/favicon.png?v=2"><style>
+  :root{
+    --bg:#030303; --panel:#0b0b0c; --line:rgba(255,255,255,0.07);
+    --gold:#d9ad4b; --gold-soft:#f3cf82; --gold-dim:#7a5f26;
+    --text:#f2efe8; --text-dim:#9c9aa3; --text-faint:#5b5960;
+    --radius-lg:22px; --radius-md:14px; --maxw:1240px;
+    --ease:cubic-bezier(.16,.8,.24,1);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ background:var(--bg); color:var(--text); font-family:'Manrope',sans-serif; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+  h1,h2,h3{ font-family:'Unbounded',sans-serif; letter-spacing:-0.01em; line-height:1.04; }
+  img,video{ max-width:100%; display:block; }
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; }
+  button{ font-family:inherit; }
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 28px; position:relative; z-index:2; }
+  .eyebrow{ display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:12px; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold-soft); }
+  .eyebrow::before{ content:''; width:18px; height:1px; background:var(--gold); box-shadow:0 0 6px var(--gold); }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:10px; font-weight:700; font-size:14px; letter-spacing:0.03em; text-transform:uppercase; padding:16px 30px; border-radius:100px; cursor:pointer; border:1px solid transparent; transition:transform .35s var(--ease), box-shadow .35s var(--ease); white-space:nowrap; }
+  .btn-gold{ background:linear-gradient(135deg,var(--gold-soft),var(--gold) 60%,var(--gold-dim)); color:#160f04; box-shadow:0 8px 30px -10px rgba(217,173,75,0.55); }
+  .btn-gold:hover{ transform:translateY(-2px); box-shadow:0 14px 36px -8px rgba(217,173,75,0.7); }
+  .btn-ghost{ background:rgba(255,255,255,0.03); border-color:rgba(255,255,255,0.18); color:var(--text); backdrop-filter:blur(6px); }
+  .btn-ghost:hover{ border-color:var(--gold); color:var(--gold-soft); transform:translateY(-2px); }
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; } }
+
+  /* ---------- LIGHT BAR (una luz a lo largo, prende y apaga) ---------- */
+  .light-bar-wrap{ padding:12px 0 18px; background:#020202; overflow:hidden; margin-top:-8px; }
+  .light-bar{ height:2px; width:100%; max-width:none; margin:0; background:linear-gradient(90deg, transparent 0%, rgba(59,130,246,0.9) 10%, rgba(236,72,153,0.9) 35%, rgba(34,197,94,0.9) 65%, rgba(59,130,246,0.9) 90%, transparent 100%); box-shadow:0 0 18px 6px rgba(59,130,246,0.32), 0 0 18px 6px rgba(236,72,153,0.24), 0 0 18px 6px rgba(34,197,94,0.22); animation:barToggle 1.6s steps(1,end) infinite; }
+  @keyframes barToggle{ 0%,55%{ opacity:1; } 56%,100%{ opacity:.12; } }
+  @media (prefers-reduced-motion: reduce){ .light-bar{ animation:none; opacity:.7; } }
+  .cta-bar{ margin-top:0; padding-top:8px; padding-bottom:12px; }
+
+  /* barra multicolor estilo boliche para el carrusel de servicios */
+  .club-bar{ height:2px; width:100%; margin:0 0 28px 0; background:linear-gradient(90deg, transparent, currentColor 50%, transparent); box-shadow:0 0 16px 3px currentColor; color:#ff3b5c; animation:clubColor 4s linear infinite, clubToggle 1s steps(1,end) infinite; position:relative; z-index:2; }
+  @keyframes clubColor{ 0%{ color:#ff3b5c; } 25%{ color:#3b82ff; } 50%{ color:#3bffa0; } 75%{ color:#c93bff; } 100%{ color:#ff3b5c; } }
+  @keyframes clubToggle{ 0%,55%{ opacity:1; } 56%,100%{ opacity:.15; } }
+  @media (prefers-reduced-motion: reduce){ .club-bar{ animation:none; opacity:.6; } }
+
+  /* ---------- NAVBAR ---------- */
+  header.nav{ position:fixed; top:0; left:0; right:0; z-index:100; padding:18px 0; transition:background .4s var(--ease), padding .4s var(--ease), border-color .4s var(--ease); border-bottom:1px solid transparent; }
+  header.nav.scrolled{ background:rgba(3,3,3,0.85); backdrop-filter:blur(14px) saturate(140%); border-bottom:1px solid var(--line); padding:12px 0; }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; gap:20px; }
+  .logo{ display:flex; align-items:center; gap:9px; }
+  .logo-img{ height:80px; width:auto; object-fit:contain; filter:drop-shadow(0 0 8px rgba(217,173,75,0.3)); }
+  footer .logo-img{ height:44px; }
+  .nav-resenas{
+    position:relative; display:inline-flex; align-items:center; justify-content:center;
+    padding:10px 16px; border-radius:999px; border:1px solid rgba(255,255,255,0.12);
+    font-size:12.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+    color:#f5f7ff; background:linear-gradient(90deg, rgba(59,130,246,0.12), rgba(236,72,153,0.12), rgba(34,197,94,0.12));
+    box-shadow:inset 0 0 12px rgba(255,255,255,0.06), 0 0 10px rgba(59,130,246,0.18);
+    transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease, color .3s ease;
+    animation:navRgbPulse 2.4s steps(1,end) infinite;
+  }
+  .nav-resenas:hover{
+    color:#fff; transform:translateY(-1px);
+    border-color:rgba(255,255,255,0.28);
+    box-shadow:0 0 18px rgba(59,130,246,0.28), 0 0 20px rgba(236,72,153,0.2), 0 0 20px rgba(34,197,94,0.18);
+  }
+  @keyframes navRgbPulse{
+    0%, 18%{ border-color:rgba(59,130,246,0.65); box-shadow:0 0 12px rgba(59,130,246,0.48), inset 0 0 12px rgba(59,130,246,0.12); color:#dfeeff; }
+    23%, 42%{ border-color:rgba(236,72,153,0.7); box-shadow:0 0 14px rgba(236,72,153,0.54), inset 0 0 12px rgba(236,72,153,0.12); color:#ffe3f4; }
+    47%, 66%{ border-color:rgba(34,197,94,0.7); box-shadow:0 0 14px rgba(34,197,94,0.52), inset 0 0 12px rgba(34,197,94,0.12); color:#e8fff1; }
+    70%, 100%{ border-color:rgba(255,255,255,0.18); box-shadow:0 0 8px rgba(255,255,255,0.12), inset 0 0 10px rgba(255,255,255,0.06); color:#f5f7ff; }
+  }
+  .nav-right{ display:flex; align-items:center; gap:14px; }
+  .nav-right .btn{ padding:10px 20px; font-size:12px; }
+  .burger{ display:flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:10px; border:1px solid var(--line); background:rgba(255,255,255,0.03); position:relative; cursor:pointer; flex:0 0 auto; z-index:101; }
+  .burger span{ position:absolute; left:9px; right:9px; height:1.5px; background:var(--text); transition:transform .35s var(--ease), opacity .3s; }
+  .burger span:nth-child(1){ top:13px; } .burger span:nth-child(2){ top:18.5px; } .burger span:nth-child(3){ top:24px; }
+  .burger.open span:nth-child(1){ transform:translateY(5.5px) rotate(45deg); }
+  .burger.open span:nth-child(2){ opacity:0; }
+  .burger.open span:nth-child(3){ transform:translateY(-5.5px) rotate(-45deg); }
+
+  /* ---------- MOBILE / SIDE MENU (panel deslizable, no ocupa toda la pantalla) ---------- */
+  .menu-overlay{ position:fixed; inset:0; z-index:98; background:rgba(0,0,0,0.55); backdrop-filter:blur(2px); opacity:0; pointer-events:none; transition:opacity .35s var(--ease); }
+  .menu-overlay.open{ opacity:1; pointer-events:auto; }
+  .mobile-menu{
+    position:fixed; top:0; right:0; bottom:0; z-index:99;
+    width:min(340px, 82vw); max-width:360px;
+    background:rgba(6,6,7,0.98); backdrop-filter:blur(14px);
+    border-left:1px solid var(--line);
+    box-shadow:-18px 0 50px -14px rgba(0,0,0,0.7);
+    display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start; gap:6px;
+    padding:100px 30px 32px;
+    transform:translateX(100%); opacity:0; pointer-events:none;
+    transition:transform .4s var(--ease), opacity .4s var(--ease);
+  }
+  .mobile-menu.open{ opacity:1; transform:translateX(0); pointer-events:auto; }
+  .mobile-menu a{
+    font-family:'Unbounded',sans-serif; font-size:19px; font-weight:600;
+    text-align:left; width:100%; padding:12px 0; border-bottom:1px solid var(--line);
+    color:var(--text); transition:color .3s ease, padding-left .3s ease;
+  }
+  .mobile-menu a:hover{ color:var(--gold-soft); padding-left:6px; }
+  .mobile-menu .btn{ margin-top:18px; width:100%; }
+  .menu-close{ position:absolute; top:24px; right:24px; width:38px; height:38px; border-radius:10px; border:1px solid var(--line); background:rgba(255,255,255,0.04); color:var(--text); font-size:18px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:border-color .3s ease, color .3s ease; }
+  .menu-close:hover{ border-color:var(--gold); color:var(--gold-soft); }
+  @media (max-width:600px){ .nav-resenas{ display:none; } }
+
+  /* ---------- HERO (video full-bleed, contenido chico y a la izquierda) ---------- */
+  .hero{ position:relative; min-height:104svh; display:flex; align-items:flex-end; overflow:hidden; background:#000; }
+  .hero-video, .hero-poster{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+  .hero-overlay{ position:absolute; inset:0; z-index:1;
+    background:
+      linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.6) 34%, rgba(0,0,0,0.1) 62%, rgba(0,0,0,0.3) 100%),
+      linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 38%, rgba(0,0,0,0.05) 60%);
+  }
+  .hero-inner{ max-width:1600px; margin:0; padding:0 4vw 80px; position:relative; z-index:2; width:100%; padding-top:40px; }
+  .hero-content{ max-width:440px; transform:translate(42px, -70px); }
+  .hero-content .eyebrow{ margin-bottom:16px; }
+  .hero-title{ font-size:clamp(28px,4vw,52px); font-weight:900; text-transform:uppercase; margin-bottom:6px; }
+  .hero-title span{ display:block; }
+  .w-white{ color:#fff; }
+  .hero-title .w-strobe:nth-child(1){ animation-delay:0s; }
+  .hero-title .w-strobe:nth-child(2){ animation-delay:0.7s; }
+  .w-strobe{ animation:strobe 2.2s ease-in-out infinite; }
+  @keyframes strobe{
+    0%,40%{ color:var(--gold-soft); text-shadow:0 0 12px var(--gold-soft),0 0 30px var(--gold),0 0 56px rgba(217,173,75,.55); }
+    50%,90%{ color:#fff8ec; text-shadow:0 0 10px #fff,0 0 24px #fff,0 0 46px rgba(255,255,255,.5); }
+    100%{ color:var(--gold-soft); text-shadow:0 0 12px var(--gold-soft); }
+  }
+  @media (prefers-reduced-motion: reduce){ .w-strobe{ animation:none; color:var(--gold-soft); text-shadow:0 0 12px var(--gold-soft),0 0 30px var(--gold); } }
+  .hero-tagline{ font-family:'Unbounded',sans-serif; font-size:clamp(15px,1.8vw,20px); font-weight:600; color:var(--gold-soft); text-transform:uppercase; letter-spacing:0.03em; margin-bottom:18px; }
+  .hero-desc{ font-size:15px; line-height:1.65; color:var(--text-dim); max-width:390px; margin-bottom:28px; }
+  .hero-actions{ display:flex; gap:12px; flex-wrap:wrap; }
+  .hero-actions .btn{ padding:15px 26px; font-size:12.5px; }
+  .hero-stats-mini{ display:flex; gap:24px; margin-top:34px; padding-top:22px; border-top:1px solid rgba(255,255,255,0.1); }
+  .hero-stats-mini div b{ display:block; font-family:'Unbounded',sans-serif; font-size:21px; color:var(--gold-soft); font-weight:700; }
+  .hero-stats-mini div span{ font-size:10.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em; }
+  @media (max-width:700px){
+    .hero{ min-height:92svh; }
+    .hero-inner{ padding:60px 20px 52px; }
+    .hero-content{ max-width:100%; transform:translate(12px, -28px); }
+    .hero-desc{ max-width:100%; }
+    .hero-overlay{ background:linear-gradient(0deg, rgba(0,0,0,0.92) 12%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.15) 100%), linear-gradient(90deg, rgba(0,0,0,0.6), rgba(0,0,0,0.2)); }
+  }
+
+  /* ---------- SERVICIOS OVERVIEW ---------- */
+  .services-section{
+    position:relative; padding:82px 0 100px; background-color:var(--bg);
+    background-image:var(--services-bg, none);
+    background-size:cover; background-position:center; background-repeat:no-repeat;
+  }
+  .services-section::before{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(90deg, rgba(3,3,3,0.9) 0%, rgba(3,3,3,0.72) 40%, rgba(3,3,3,0.75) 100%);
+  }
+  .services-section > .wrap{ position:relative; z-index:1; }
+  .section-head{ max-width:640px; margin-bottom:48px; }
+  .section-head h2{ font-size:clamp(24px,3vw,38px); font-weight:800; text-transform:uppercase; margin-top:14px; }
+  .section-head p{ color:var(--text-dim); margin-top:14px; font-size:14.5px; line-height:1.6; max-width:520px; }
+  .services-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .service-chip{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius-md); padding:24px 20px;
+    transition:border-color .35s, transform .4s var(--ease), background .35s, box-shadow .4s var(--ease);
+    transform:perspective(700px) rotateX(0) rotateY(0);
+    position:relative; overflow:hidden;
+    opacity:0; animation:chipIn .7s var(--ease) forwards; animation-play-state:paused;
+  }
+  .service-chip.in{ animation-play-state:running; }
+  .service-chip:nth-child(1){ animation-delay:.05s; }
+  .service-chip:nth-child(2){ animation-delay:.18s; }
+  .service-chip:nth-child(3){ animation-delay:.31s; }
+  .service-chip:nth-child(4){ animation-delay:.44s; }
+  @keyframes chipIn{ from{ opacity:0; transform:translateY(26px) scale(.96); } to{ opacity:1; transform:translateY(0) scale(1); } }
+  .service-chip::after{
+    content:''; position:absolute; top:0; left:-60%; width:40%; height:100%;
+    background:linear-gradient(120deg, transparent, rgba(217,173,75,0.14), transparent);
+    transform:skewX(-20deg); transition:left .7s var(--ease);
+  }
+  .service-chip:hover::after{ left:130%; }
+  .service-chip:hover{ border-color:rgba(217,173,75,0.4); transform:perspective(700px) rotateX(2deg) rotateY(-2deg) translateY(-6px); background:#111113; box-shadow:0 18px 34px -18px rgba(217,173,75,0.5); }
+  .service-chip .num{ font-family:'Unbounded',sans-serif; font-size:11.5px; color:var(--gold-dim); margin-bottom:12px; transition:color .35s ease, text-shadow .35s ease; }
+  .service-chip:hover .num{ color:var(--gold-soft); text-shadow:0 0 10px rgba(217,173,75,0.5); }
+  .service-chip h3{ font-size:15px; font-weight:700; margin-bottom:7px; }
+  .service-chip p{ font-size:13px; color:var(--text-faint); line-height:1.5; }
+  @media (max-width:980px){ .services-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .services-grid{ grid-template-columns:1fr; } }
+  @media (prefers-reduced-motion: reduce){ .service-chip{ opacity:1; animation:none; } }
+
+  /* ---------- STAGE VISUAL LAYER (compartido) ---------- */
+  .stage{ position:relative; padding:60px 0 80px; overflow:hidden; background:#020202; border-top:1px solid var(--line); background-image:var(--services-bg, none); background-size:cover; background-position:center; background-repeat:no-repeat; }
+  .stage::before{ content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(90deg, rgba(3,3,3,0.9) 0%, rgba(3,3,3,0.76) 42%, rgba(3,3,3,0.8) 100%); }
+  .stage > *{ position:relative; z-index:1; }
+  .stage-glow{ position:absolute; inset:0; pointer-events:none; background:radial-gradient(ellipse 60% 55% at 50% 0%, rgba(217,173,75,0.11), transparent 65%); }
+  .stage-beams{ position:absolute; inset:0; pointer-events:none; opacity:.4; }
+  .stage-beams span{ position:absolute; top:-10%; width:2px; height:140%; background:linear-gradient(180deg, rgba(217,173,75,0.4), transparent 70%); filter:blur(1px); animation:beamSway 7s ease-in-out infinite; transform-origin:top center; }
+  .stage-beams span:nth-child(1){ left:12%; animation-delay:0s; }
+  .stage-beams span:nth-child(2){ left:34%; animation-delay:-2.2s; background:linear-gradient(180deg, rgba(247,225,170,0.28), transparent 70%); }
+  .stage-beams span:nth-child(3){ left:66%; animation-delay:-4.4s; }
+  .stage-beams span:nth-child(4){ left:88%; animation-delay:-1.2s; background:linear-gradient(180deg, rgba(247,225,170,0.26), transparent 70%); }
+  @keyframes beamSway{ 0%,100%{ transform:rotate(-3deg); opacity:.3; } 50%{ transform:rotate(3deg); opacity:.8; } }
+  .stage .smoke{ position:absolute; inset:0; pointer-events:none; opacity:.35; mix-blend-mode:screen; }
+  .stage .smoke span{ position:absolute; border-radius:50%; filter:blur(46px); background:radial-gradient(circle, rgba(217,173,75,0.09), transparent 70%); animation:drift 26s linear infinite; }
+  .stage .smoke span:nth-child(1){ width:420px; height:420px; left:-8%; top:15%; }
+  .stage .smoke span:nth-child(2){ width:340px; height:340px; left:55%; top:55%; animation-duration:32s; animation-delay:-9s; }
+  .stage .smoke span:nth-child(3){ width:300px; height:300px; left:78%; top:5%; animation-duration:28s; animation-delay:-15s; }
+  @keyframes drift{ 0%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(4%,-3%) scale(1.08); } 100%{ transform:translate(0,0) scale(1); } }
+
+  /* ---------- CARRUSEL DE SERVICIOS (reemplaza secciones separadas) ---------- */
+  .carousel-tabs{ position:relative; z-index:2; display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:44px; }
+  .carousel-tabs button{ padding:10px 18px; border-radius:100px; border:1px solid var(--line); background:rgba(255,255,255,0.03); color:var(--text-dim); font-size:11.5px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; cursor:pointer; transition:.3s var(--ease); }
+  .carousel-tabs button.active{ border-color:rgba(217,173,75,0.55); color:var(--gold-soft); background:rgba(217,173,75,0.09); }
+  .carousel-viewport{ position:relative; z-index:2; overflow:visible; }
+  .carousel-track{ display:flex; transition:transform .55s var(--ease); }
+  .carousel-slide{ flex:0 0 100%; max-width:100%; }
+  .stage-inner{ text-align:center; max-width:760px; margin:0 auto; padding:0 20px; }
+  .stage-badge{ display:inline-flex; align-items:center; gap:8px; padding:8px 18px; border-radius:100px; background:rgba(217,173,75,0.1); border:1px solid rgba(217,173,75,0.35); font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold-soft); margin-bottom:24px; }
+  .stage-inner h2{ font-size:clamp(30px,5vw,60px); font-weight:900; text-transform:uppercase; margin-bottom:20px; background:linear-gradient(100deg,#fff,var(--gold-soft) 50%,#fff); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .stage-inner > p{ color:var(--text-dim); font-size:15px; line-height:1.7; margin:0 auto 40px; max-width:560px; }
+  .stage-cta-copy{
+    margin:0 auto 28px; max-width:660px;
+    font-family:'Unbounded',sans-serif;
+    font-size:clamp(14px,1.8vw,20px);
+    font-weight:700;
+    line-height:1.5;
+    letter-spacing:0.02em;
+    color:#f8f3e7;
+    text-shadow:0 0 16px rgba(255,255,255,0.2);
+    font-style:italic;
+    animation:ctaRgbPulse 2.4s steps(1,end) infinite;
+  }
+  @keyframes ctaRgbPulse{
+    0%, 18%{ color:#f3cf82; text-shadow:0 0 12px rgba(243,207,130,0.8), 0 0 22px rgba(243,207,130,0.35); }
+    23%, 42%{ color:#fffaf0; text-shadow:0 0 12px rgba(255,255,255,0.9), 0 0 24px rgba(236,72,153,0.28); }
+    47%, 66%{ color:#f3cf82; text-shadow:0 0 12px rgba(52,211,153,0.8), 0 0 22px rgba(52,211,153,0.28); }
+    70%, 100%{ color:#fffaf0; text-shadow:0 0 10px rgba(255,255,255,0.6); }
+  }
+  @media (prefers-reduced-motion: reduce){ .stage-cta-copy{ animation:none; color:#f3cf82; text-shadow:0 0 12px rgba(243,207,130,0.7); } }
+  .stage-features{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; text-align:left; margin-bottom:38px; }
+  .stage-features.cols-2{ grid-template-columns:repeat(2,1fr); }
+  .stage-feat{ background:rgba(255,255,255,0.025); border:1px solid var(--line); border-radius:var(--radius-md); padding:20px; backdrop-filter:blur(6px); transition:transform .4s var(--ease), border-color .35s; transform:perspective(700px) rotateX(0) rotateY(0); }
+  .stage-feat:hover{ border-color:rgba(217,173,75,0.4); transform:perspective(700px) rotateX(2deg) rotateY(-2deg) translateY(-3px); }
+  .stage-feat b{ display:block; font-family:'Unbounded',sans-serif; font-size:13px; color:var(--gold-soft); margin-bottom:7px; text-transform:uppercase; }
+  .stage-feat span{ font-size:13px; color:var(--text-faint); line-height:1.5; }
+  @media (max-width:800px){ .stage-features, .stage-features.cols-2{ grid-template-columns:1fr; text-align:left; } }
+  .carousel-arrows{ position:absolute; top:50%; transform:translateY(-50%); z-index:30; width:50px; height:50px; border-radius:50%; border:none; background:#000000; color:var(--gold-soft); font-size:28px; cursor:pointer; transition:all .3s ease; display:flex; align-items:center; justify-content:center; font-weight:bold; box-shadow:0 4px 14px rgba(0,0,0,0.8); }
+  .carousel-arrows:hover{ color:var(--gold); background:#1a1a1a; transform:translateY(-50%) scale(1.15); box-shadow:0 6px 20px rgba(217,173,75,0.6); }
+  .carousel-arrows.prev{ left:-30px; } 
+  .carousel-arrows.next{ right:-30px; }
+  .carousel-dots{ position:relative; z-index:2; display:flex; justify-content:center; gap:8px; margin-top:34px; }
+  .carousel-dots button{ width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,0.2); border:none; cursor:pointer; padding:0; }
+  .carousel-dots button.active{ background:var(--gold-soft); box-shadow:0 0 8px 2px rgba(243,207,130,.6); }
+  @media (max-width:700px){ .carousel-arrows{ display:none; } }
+
+  /* Carrusel "estilo boliche": sin dorado ambiental, acentos RGB, listo para imagen de fondo */
+  .stage-club{ background:#050506; background-image:var(--services-bg, none); background-size:cover; background-position:center; background-repeat:no-repeat; }
+  .stage-club::before{ content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(90deg, rgba(3,3,3,0.9) 0%, rgba(3,3,3,0.72) 40%, rgba(3,3,3,0.75) 100%); }
+  .stage-club .stage-inner h2{ background:linear-gradient(100deg,#fff,#d8d8dc 50%,#fff); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .stage-club .stage-feat b{ color:#fff; }
+  .stage-club .stage-feat{ border-color:rgba(255,255,255,0.09); }
+  .stage-club .carousel-tabs button.active{ border-color:currentColor; color:#fff; background:rgba(255,255,255,0.06); animation:clubColor 4s linear infinite; }
+  .stage-club .carousel-dots button.active{ background:currentColor; box-shadow:0 0 8px 2px currentColor; animation:clubColor 4s linear infinite; }
+
+  /* Stand Glitter dentro del carrusel */
+  .glitter-panels{ display:grid; grid-template-columns:1fr 1fr; gap:16px; text-align:left; margin-bottom:38px; }
+  .glitter-panel{ background:rgba(255,255,255,0.025); border:1px solid var(--line); border-radius:var(--radius-lg); padding:28px 24px; position:relative; overflow:hidden; }
+  .glitter-panel.premium{ border-color:rgba(217,173,75,0.45); }
+  .glitter-panel.premium::before{ content:''; position:absolute; inset:0; pointer-events:none; background:radial-gradient(circle at 90% 0%, rgba(217,173,75,0.13), transparent 55%); }
+  .glitter-tag{ font-size:10.5px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-soft); margin-bottom:8px; display:block; }
+  .glitter-panel h3{ font-size:18px; font-weight:800; text-transform:uppercase; margin-bottom:16px; }
+  .glitter-panel ul{ display:flex; flex-direction:column; gap:9px; margin-bottom:22px; }
+  .glitter-panel li{ font-size:12.5px; color:var(--text-dim); display:flex; gap:9px; line-height:1.5; }
+  .glitter-panel li::before{ content:'—'; color:var(--gold-dim); flex:0 0 auto; }
+  @media (max-width:800px){ .glitter-panels{ grid-template-columns:1fr; } }
+
+  /* ---------- RESEÑAS DE CLIENTES ---------- */
+  .reviews-section{ padding:100px 0; background:var(--bg); text-align:center; }
+  .reviews-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; max-width:900px; margin:44px auto 0; }
+  .review-card{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius-md); padding:28px 22px; text-align:left; }
+  .review-card .stars{ color:var(--gold-soft); font-size:14px; margin-bottom:14px; letter-spacing:2px; }
+  .review-card p{ font-size:13px; color:var(--text-faint); line-height:1.6; }
+  @media (max-width:800px){ .reviews-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- EXTRAS ---------- */
+  .extras-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; text-align:left; max-width:760px; margin:0 auto; }
+  .extra-card{ display:flex; align-items:center; gap:18px; background:rgba(255,255,255,0.025); border:1px solid var(--line); border-radius:var(--radius-md); padding:24px; transition:transform .4s var(--ease), border-color .35s; transform:perspective(700px) rotateX(0) rotateY(0); }
+  .extra-card:hover{ border-color:rgba(217,173,75,0.4); transform:perspective(700px) rotateX(2deg) rotateY(-2deg) translateY(-3px); }
+  .extra-icon{ flex:0 0 auto; width:46px; height:46px; border-radius:13px; background:radial-gradient(circle at 30% 30%, rgba(217,173,75,0.3), rgba(217,173,75,0.05)); border:1px solid rgba(217,173,75,0.3); display:flex; align-items:center; justify-content:center; font-family:'Unbounded',sans-serif; color:var(--gold-soft); font-size:14px; }
+  .extra-card h3{ font-size:14px; font-weight:700; margin-bottom:4px; }
+  .extra-card p{ font-size:12px; color:var(--text-faint); }
+  @media (max-width:700px){ .extras-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- STATS ---------- */
+  .stats-band{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; max-width:900px; margin:0 auto; text-align:center; }
+  .stat-item{ padding:38px 20px; border-radius:var(--radius-lg); border:1px solid var(--line); background:var(--panel); position:relative; overflow:hidden; }
+  .stat-item::before{ content:''; position:absolute; top:0; left:20%; right:20%; height:1px; background:linear-gradient(90deg, transparent, var(--gold-soft), transparent); box-shadow:0 0 8px var(--gold-soft); }
+  .stat-item .num{ font-family:'Unbounded',sans-serif; font-size:clamp(38px,6vw,56px); font-weight:800; color:var(--gold-soft); line-height:1; }
+  .stat-item .label{ margin-top:10px; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint); }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    position:relative; padding:56px 0 30px; background:var(--bg);
+  }
+  footer::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, transparent 0%, rgba(243,207,130,0.9) 12%, rgba(59,130,246,0.9) 35%, rgba(236,72,153,0.9) 60%, rgba(34,197,94,0.9) 82%, transparent 100%);
+    box-shadow:0 0 14px rgba(243,207,130,0.45), 0 0 18px rgba(59,130,246,0.24), 0 0 18px rgba(236,72,153,0.2);
+    animation:footerRgbLine 2.8s steps(1,end) infinite;
+  }
+  @keyframes footerRgbLine{
+    0%, 18%{ opacity:1; }
+    23%, 42%{ opacity:.8; }
+    47%, 66%{ opacity:1; }
+    70%, 100%{ opacity:.7; }
+  }
+  .footer-wrap{ display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap; }
+  .footer-left{ display:flex; flex-direction:column; align-items:flex-start; gap:14px; }
+  .footer-brand{ display:flex; flex-direction:column; align-items:flex-start; gap:10px; }
+  .footer-brand p{ margin-top:4px; font-size:13.5px; max-width:360px; color:#f2efe8; }
+  .footer-right{ margin-left:auto; display:flex; align-items:center; gap:12px; }
+  .footer-social{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:46px; height:46px; border-radius:50%;
+    border:1px solid rgba(255,255,255,0.14);
+    background:rgba(255,255,255,0.03);
+    color:var(--text);
+    transition:transform .3s var(--ease), border-color .3s ease, box-shadow .3s ease, color .3s ease, background .3s ease;
+  }
+  .footer-social svg{ width:20px; height:20px; }
+  .footer-social:hover{
+    transform:translateY(-3px);
+    border-color:transparent;
+    color:#fff;
+    background:linear-gradient(45deg,#f9ce34,#ee2a7b,#6228d7);
+    box-shadow:0 10px 26px -8px rgba(238,42,123,0.55);
+  }
+  .footer-social.whatsapp:hover{
+    background:#25d366;
+    box-shadow:0 10px 26px -8px rgba(37,211,102,0.55);
+  }
+  .footer-bottom{ margin-top:30px; padding-top:20px; border-top:1px solid var(--line); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; font-size:11.5px; color:var(--text-faint); text-align:center; }
+  .footer-copyright{ display:inline-flex; align-items:center; justify-content:center; gap:8px; color:#f5f5f5; font-size:14px; font-weight:700; letter-spacing:0.04em; }
+  .copy-mark{ font-size:16px; color:#fff; line-height:1; }
+  .footer-author{
+    font-size:11px; font-weight:600; letter-spacing:0.04em;
+    color:var(--gold-soft);
+  }
+  @media (max-width:700px){ .footer-wrap{ flex-direction:column; align-items:flex-start; } .footer-left{ align-items:flex-start; } .footer-right{ margin-left:0; width:auto; } }
+
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* ---------- WHATSAPP FLOTANTE ---------- */
+  .whatsapp-float{ position:fixed; bottom:22px; right:22px; z-index:200; width:64px; height:64px; border-radius:50%; overflow:hidden; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 26px -6px rgba(0,0,0,0.6); transition:transform .3s var(--ease); background:#000; }
+  .whatsapp-float:hover{ transform:scale(1.08); }
+  .whatsapp-float img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .whatsapp-float::before{ content:''; position:absolute; inset:-6px; border-radius:50%; border:2px solid rgba(37,211,102,0.5); animation:wapPulse 2.2s ease-out infinite; }
+  @keyframes wapPulse{ 0%{ transform:scale(.9); opacity:.8; } 100%{ transform:scale(1.5); opacity:0; } }
+  @media (prefers-reduced-motion: reduce){ .whatsapp-float::before{ animation:none; opacity:0; } }
+  @media (max-width:700px){ .whatsapp-float{ bottom:16px; right:16px; width:52px; height:52px; } }
+</style>
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header class="nav" id="navHeader">
+  <div class="wrap nav-inner">
+    <a href="#inicio" class="logo"><img src="img/logo.png" alt="Eventos Coronados" class="logo-img"></a>
+    <div class="nav-right">
+      <a href="reseñas.html" class="btn btn-ghost" style="padding:10px 18px; font-size:11px;">Reseñas de clientes</a>
+      <button class="burger" id="burgerBtn" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="menu-overlay" id="menuOverlay"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" id="menuCloseBtn" aria-label="Cerrar menú">✕</button>
+  <a href="#inicio">Inicio</a>
+  <a href="#servicios">Servicios</a>
+  <a href="#experiencias">Experiencias</a>
+  <a href="#nosotros">Nosotros</a>
+  <a href="#contacto">Contacto</a>
+  <a href="reseñas.html">Reseñas de clientes</a>
+</div>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="inicio">
+  <img class="hero-video" id="heroVideo" src="img/hero.png" alt="Eventos Coronados">
+  <div class="hero-overlay"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <span class="eyebrow">Servicios para tu evento</span>
+      <h1 class="hero-title"><span class="w-strobe">Eventos</span><span class="w-strobe">Coronados</span></h1>
+      <p class="hero-tagline">El show lo llevamos nosotros</p>
+      <p class="hero-desc">Vos ponés la fiesta, nosotros el espectáculo: plataforma 360°, cabina fotográfica, stand glitter y el Show Depredador LED, directo a tu evento.</p>
+      <div class="hero-actions">
+        <a href="#contacto" class="btn btn-gold">Quiero cotizar mi evento</a>
+        <a href="#experiencias" class="btn btn-ghost">Ver shows</a>
+      </div>
+      <div class="hero-stats-mini">
+        <div><b data-count="2" data-suffix="+">0</b><span>Años</span></div>
+        <div><b data-count="300" data-suffix="+">0</b><span>Eventos</span></div>
+        <div><b data-count="300" data-suffix="+">0</b><span>Clientes satisfechos</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="light-bar-wrap"><div class="light-bar"></div></div>
+
+<!-- ================= SERVICIOS OVERVIEW ================= -->
+<section class="services-section" id="servicios" style="--services-bg: url('img/fondo1prueba.jpg');">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Así funciona</span>
+      <h2>Vos elegís el show, nosotros lo llevamos</h2>
+      <p>Instalamos, operamos y desarmamos. Cada servicio llega completo a tu evento, listo para funcionar.</p>
+    </div>
+    <div class="services-grid" id="servicesGrid">
+      <div class="service-chip"><div class="num">01</div><h3>Plataforma 360°</h3><p>La instalamos, grabamos y tus invitados se llevan el video al instante.</p></div>
+      <div class="service-chip"><div class="num">02</div><h3>Cabina Fotográfica</h3><p>Cabina, operador y fotos impresas en el momento.</p></div>
+      <div class="service-chip"><div class="num">03</div><h3>Stand Glitter</h3><p>Glitter y brillo en vivo para que todos salgan protagonistas.</p></div>
+      <div class="service-chip"><div class="num">04</div><h3>Show Depredador LED</h3><p>30 minutos de coreografía, luces y humo que cortan la fiesta en dos.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CARRUSEL DE SERVICIOS ================= -->
+<section class="stage stage-club" id="experiencias" style="--services-bg: url('img/fondo2prueba.png');">
+  <!-- Apartado listo para imagen de fondo propia: agregar background-image a .stage-club en el CSS o vía style inline -->
+
+  <div class="club-bar"></div>
+  <div class="wrap">
+    <div class="carousel-tabs" id="carouselTabs">
+      <button data-slide="0" class="active">Plataforma 360°</button>
+      <button data-slide="1">Cabina Fotográfica</button>
+      <button data-slide="2">Stand Glitter</button>
+      <button data-slide="3">Show Depredador LED</button>
+    </div>
+
+    <div class="carousel-viewport">
+      <button class="carousel-arrows prev" id="carPrev" aria-label="Anterior">‹</button>
+      <button class="carousel-arrows next" id="carNext" aria-label="Siguiente">›</button>
+
+      <div class="carousel-track" id="carouselTrack">
+
+        <div class="carousel-slide">
+          <div class="stage-inner">
+            <span class="stage-badge">Servicio 01 — Video en 360°</span>
+            <h2>Plataforma 360°</h2>
+            <p>La llevamos, la instalamos y la operamos toda la noche. Tus invitados suben, giran y se llevan un video de altísima calidad directo al celular.</p>
+            <div class="stage-features">
+              <div class="stage-feat"><b>Grabación en alta calidad</b><span>Video profesional listo para compartir al instante.</span></div>
+              <div class="stage-feat"><b>Iluminación LED integrada</b><span>Cada toma sale con el brillo del show.</span></div>
+              <div class="stage-feat"><b>Descarga por QR</b><span>Cada invitado se lleva su video al toque.</span></div>
+            </div>
+            <a href="#contacto" class="btn btn-ghost">Consultar disponibilidad</a>
+          </div>
+        </div>
+
+        <div class="carousel-slide">
+          <div class="stage-inner">
+            <span class="stage-badge">Servicio 02 — Fotos al instante</span>
+            <h2>Cabina Fotográfica</h2>
+            <p>Otra que llevamos entera a tu evento: cabina, operador y cotillón premium. Recuerdos físicos, impresos en el momento.</p>
+            <div class="stage-features">
+              <div class="stage-feat"><b>Operador incluido</b><span>Durante todo el tiempo contratado.</span></div>
+              <div class="stage-feat"><b>Fotos 2x6 ilimitadas</b><span>Impresas al instante, sin límite.</span></div>
+              <div class="stage-feat"><b>Diseño personalizado</b><span>Adaptado a los gustos de tu evento.</span></div>
+            </div>
+            <a href="#contacto" class="btn btn-ghost">Solicitar cotización</a>
+          </div>
+        </div>
+
+        <div class="carousel-slide">
+          <div class="stage-inner">
+            <span class="stage-badge">Servicio 03 — Brillo para todos</span>
+            <h2>Stand Glitter</h2>
+            <p>Elegí la intensidad del brillo. Dos modalidades, un solo objetivo: que nadie se vaya sin su glitter.</p>
+            <div class="glitter-panels">
+              <div class="glitter-panel">
+                <span class="glitter-tag">Básico</span><h3>Glitter Básico</h3>
+                <ul>
+                  <li>Variedad de colores Glitter Gel</li>
+                  <li>Piedras adhesivas + glitter para anfitrión/a</li>
+                  <li>Glitter y gemas faciales básicos para invitados</li>
+                  <li>Aplique Stencil con glitter</li>
+                  <li>Pintura y brillo para el pelo</li>
+                </ul>
+                <a href="#contacto" class="btn btn-ghost">Consultar disponibilidad</a>
+              </div>
+              <div class="glitter-panel premium">
+                <span class="glitter-tag">Premium</span><h3>Glitter Premium</h3>
+                <ul>
+                  <li>Variedad de colores Glitter Gel</li>
+                  <li>Piedras adhesivas + glitter para anfitrión/a</li>
+                  <li>Glitter y gemas faciales para todos los invitados</li>
+                  <li>Tatuajes con stencil y variedad de diseños</li>
+                  <li>Tatuajes temporales + polvo de hada</li>
+                  <li>Pintura y brillo para el pelo</li>
+                </ul>
+                <a href="#contacto" class="btn btn-gold">Solicitar cotización</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="carousel-slide">
+          <div class="stage-inner">
+            <span class="stage-badge">★ El más elegido</span>
+            <h2>Show Depredador LED</h2>
+            <p>30 minutos de pura adrenalina. Una intro misteriosa, coreografías exclusivas y un limbo LED interactivo que pone a bailar a todos tus invitados.</p>
+            <div class="stage-features">
+              <div class="stage-feat"><b>Intro de impacto</b><span>Entrada misteriosa con impacto visual y sonoro.</span></div>
+              <div class="stage-feat"><b>Coreografía en vivo</b><span>Exclusiva, al ritmo real de tu fiesta.</span></div>
+              <div class="stage-feat"><b>Limbo LED interactivo</b><span>Los invitados participan del show.</span></div>
+            </div>
+            <a href="#contacto" class="btn btn-gold">Reservar mi fecha</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="carousel-dots" id="carouselDots"></div>
+  </div>
+</section>
+
+
+
+<!-- ================= STATS ================= -->
+<section class="services-section" id="nosotros" style="padding-top:10px;">
+  <div class="wrap">
+    <div class="section-head reveal" style="margin-left:auto; margin-right:auto; text-align:center;">
+      <span class="eyebrow" style="justify-content:center;">Nuestra trayectoria</span>
+      <h2>Experiencia que se nota en cada evento</h2>
+    </div>
+    <div class="stats-band">
+      <div class="stat-item reveal"><div class="num" data-count="2" data-suffix="+">0</div><div class="label">Años</div></div>
+      <div class="stat-item reveal"><div class="num" data-count="300" data-suffix="+">0</div><div class="label">Eventos</div></div>
+      <div class="stat-item reveal"><div class="num" data-count="300" data-suffix="+">0</div><div class="label">Clientes satisfechos y sumando</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="light-bar-wrap cta-bar"><div class="light-bar"></div></div>
+
+<!-- ================= CTA FINAL ================= -->
+<section class="stage" id="contacto" style="--services-bg: url('img/fondo3prueba.png'); padding-top:34px;">
+  <div class="stage-glow"></div>
+  <div class="stage-beams"><span></span><span></span><span></span><span></span></div>
+  <div class="smoke"><span></span><span></span><span></span></div>
+  <div class="wrap stage-inner">
+    <h2 class="reveal">Tu evento merece su show coronado</h2>
+    <p class="reveal stage-cta-copy">Contanos qué estás festejando y armamos el show ideal. Sin vueltas, directo por WhatsApp.</p>
+    <div class="reveal" style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+      <a href="#" class="btn btn-gold">Quiero cotizar mi evento</a>
+      <a href="#" class="btn btn-ghost">Consultar disponibilidad</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap footer-wrap">
+    <div class="footer-left">
+      <div class="footer-brand">
+        <a href="#inicio" class="logo"><img src="img/logo.png" alt="Eventos Coronados" class="logo-img"></a>
+        <p>Shows y entretenimiento que llevamos a tu evento.</p>
+      </div>
+    </div>
+    <div class="footer-right">
+      <a class="footer-social instagram" href="https://www.instagram.com/eventoscoronados/" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.15" fill="currentColor"/></svg>
+      </a>
+      <a class="footer-social whatsapp" href="https://wa.me/5549115220407?text=Hola%2C%20vengo%20de%20la%20pagina%20web%20y%20me%20gustar%C3%ADa%20contactarme%20con%20ustedes" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a10 10 0 0 0-8.62 15.1L2 22l5.05-1.33A10 10 0 1 0 12 2Z" stroke="currentColor" stroke-width="1.6"/><path d="M8.3 8.4c.2-.5.4-.5.6-.5h.5c.16 0 .38 0 .55.42.2.5.68 1.7.74 1.83.06.13.1.28.02.45-.08.17-.13.28-.26.42-.13.14-.27.32-.39.43-.13.13-.26.27-.11.53.14.26.63 1.06 1.36 1.72.94.85 1.72 1.11 1.98 1.24.26.13.42.11.57-.06.16-.18.66-.76.84-1.02.18-.26.35-.22.6-.13.24.09 1.55.74 1.82.87.26.14.43.2.5.31.06.11.06.65-.15 1.28-.21.63-1.24 1.2-1.72 1.27-.44.07-1 .1-1.62-.1-.37-.12-.86-.28-1.48-.55-2.6-1.14-4.3-3.77-4.44-3.95-.13-.17-1.06-1.41-1.06-2.7 0-1.28.65-1.9.88-2.16Z" fill="currentColor"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <div class="footer-copyright"><span class="copy-mark">©</span><span>Todos los derechos reservados.</span></div>
+    <div class="footer-author">Desarrollado por Mateo Deris - Software Developer</div>
+  </div>
+</footer>
+
+<a href="https://wa.me/5549115220407?text=Hola%2C%20vengo%20de%20la%20pagina%20web%20y%20me%20gustar%C3%ADa%20contactarme%20con%20ustedes" class="whatsapp-float" aria-label="Hablar por WhatsApp" target="_blank" rel="noopener">
+  <img src="img/btn-wsp.jpg" alt="WhatsApp">
+</a>
+
+<script>
+(function(){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const header = document.getElementById('navHeader');
+  const onScroll = () => { header.classList.toggle('scrolled', window.scrollY > 30); };
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  const burger = document.getElementById('burgerBtn');
+  const menu = document.getElementById('mobileMenu');
+  const overlay = document.getElementById('menuOverlay');
+  const closeBtn = document.getElementById('menuCloseBtn');
+  function openMenu(){ burger.classList.add('open'); menu.classList.add('open'); overlay.classList.add('open'); }
+  function closeMenu(){ burger.classList.remove('open'); menu.classList.remove('open'); overlay.classList.remove('open'); }
+  burger.addEventListener('click', () => { menu.classList.contains('open') ? closeMenu() : openMenu(); });
+  closeBtn.addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+  const whatsappNumber = '5549115220407';
+  const whatsappMessage = 'Hola, vengo de la pagina web y me gustaría contactarme con ustedes';
+  const whatsappUrl = 'https://wa.me/' + whatsappNumber + '?text=' + encodeURIComponent(whatsappMessage);
+  document.querySelectorAll('[data-whatsapp-link], .whatsapp-float, .footer-social.whatsapp').forEach(link => {
+    link.href = whatsappUrl;
+    link.setAttribute('target', '_blank');
+    link.setAttribute('rel', 'noopener');
+  });
+
+  const heroVideo = document.getElementById('heroVideo');
+  if(heroVideo && reduceMotion){ heroVideo.pause(); }
+
+  const revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if(entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); } });
+    }, {threshold:0.15, rootMargin:'0px 0px -40px 0px'});
+    revealEls.forEach(el => io.observe(el));
+  } else { revealEls.forEach(el => el.classList.add('in')); }
+
+  // Animación de entrada de los chips de "Así funciona"
+  const chipEls = document.querySelectorAll('.service-chip');
+  if('IntersectionObserver' in window){
+    const chipIo = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if(entry.isIntersecting){ entry.target.classList.add('in'); chipIo.unobserve(entry.target); } });
+    }, {threshold:0.2, rootMargin:'0px 0px -30px 0px'});
+    chipEls.forEach(el => chipIo.observe(el));
+  } else { chipEls.forEach(el => el.classList.add('in')); }
+
+  const counters = document.querySelectorAll('[data-count]');
+  const animateCount = (el) => {
+    const target = parseInt(el.getAttribute('data-count'), 10);
+    const suffix = el.getAttribute('data-suffix') || '';
+    if(reduceMotion){ el.textContent = target + suffix; return; }
+    const duration = 1400; const start = performance.now();
+    const step = (now) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(eased * target) + suffix;
+      if(progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  if('IntersectionObserver' in window){
+    const statIo = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if(entry.isIntersecting){ animateCount(entry.target); statIo.unobserve(entry.target); } });
+    }, {threshold:0.4});
+    counters.forEach(c => statIo.observe(c));
+  } else { counters.forEach(animateCount); }
+
+  // ---------- CARRUSEL DE SERVICIOS ----------
+  const track = document.getElementById('carouselTrack');
+  const tabs = document.querySelectorAll('#carouselTabs button');
+  const dotsWrap = document.getElementById('carouselDots');
+  const slides = track.querySelectorAll('.carousel-slide');
+  const prevBtn = document.getElementById('carPrev');
+  const nextBtn = document.getElementById('carNext');
+  let current = 0;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    if(i === 0) dot.classList.add('active');
+    dot.addEventListener('click', () => { goTo(i); restartAutoplay(); });
+    dotsWrap.appendChild(dot);
+  });
+  const dots = dotsWrap.querySelectorAll('button');
+
+  function goTo(index){
+    current = (index + slides.length) % slides.length;
+    track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    tabs.forEach((t,i) => t.classList.toggle('active', i === current));
+    dots.forEach((d,i) => d.classList.toggle('active', i === current));
+  }
+  tabs.forEach(t => t.addEventListener('click', () => { goTo(parseInt(t.dataset.slide,10)); restartAutoplay(); }));
+  prevBtn.addEventListener('click', () => { goTo(current - 1); restartAutoplay(); });
+  nextBtn.addEventListener('click', () => { goTo(current + 1); restartAutoplay(); });
+
+  let autoplayTimer = null;
+  function startAutoplay(){ if(reduceMotion) return; autoplayTimer = setInterval(() => goTo(current + 1), 5000); }
+  function stopAutoplay(){ if(autoplayTimer){ clearInterval(autoplayTimer); autoplayTimer = null; } }
+  function restartAutoplay(){ stopAutoplay(); startAutoplay(); }
+  startAutoplay();
+  const carouselSection = document.getElementById('experiencias');
+  carouselSection.addEventListener('mouseenter', stopAutoplay);
+  carouselSection.addEventListener('mouseleave', startAutoplay);
+
+  let touchX = null;
+  track.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, {passive:true});
+  track.addEventListener('touchend', (e) => {
+    if(touchX === null) return;
+    const delta = e.changedTouches[0].clientX - touchX;
+    if(Math.abs(delta) > 50){ goTo(current + (delta < 0 ? 1 : -1)); }
+    touchX = null;
+  }, {passive:true});
+})();
+</script>
+</body>
+</html>
