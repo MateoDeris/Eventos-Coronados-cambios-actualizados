@@ -7,7 +7,7 @@
 <meta name="description" content="Eventos Coronados lleva el show a tu evento: plataforma 360°, cabina fotográfica, stand glitter y Show Depredador LED. Consultá disponibilidad.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Manrope:wght@400;500;600;700;800&family=Yellowtail&family=Playfair+Display:ital,wght@1,500;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,500;1,700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="/img/favicon.png?v=2"><style>
   :root{
     --bg:#030303; --panel:#0b0b0c; --line:rgba(255,255,255,0.07);
@@ -370,21 +370,23 @@
 
   /* ---------- GALERÍA ---------- */
   .gallery{ position:relative; }
-  .gal-track{ display:flex; gap:16px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; padding-bottom:6px; scrollbar-width:none; }
+  .gal-track{ display:flex; gap:16px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; padding-bottom:6px; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
   .gal-track::-webkit-scrollbar{ display:none; }
-  .gal-item{ position:relative; flex:0 0 calc((100% - 48px) / 4); aspect-ratio:4/5; border-radius:var(--radius-md); overflow:hidden; scroll-snap-align:start; border:1px solid var(--line); background:var(--panel); cursor:zoom-in; }
+  .gal-item{ position:relative; flex:0 0 calc((100% - 48px) / 4); aspect-ratio:4/5; border-radius:var(--radius-md); overflow:hidden; scroll-snap-align:start; border:1px solid var(--line); background:var(--panel); cursor:zoom-in; margin:0; }
   .gal-item img{ width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease); }
   .gal-item:hover img{ transform:scale(1.05); }
-  .gal-item figcaption{ position:absolute; left:0; right:0; bottom:0; padding:28px 16px 14px; font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-soft); background:linear-gradient(transparent, rgba(0,0,0,0.85)); }
-  /* espacio vacío hasta que se cargue la foto */
-  .gal-item.empty{ cursor:default; background:radial-gradient(circle at 50% 40%, rgba(217,173,75,0.1), transparent 65%), var(--panel); border-style:dashed; border-color:rgba(217,173,75,0.25); }
-  .gal-item.empty img{ display:none; }
-  .gal-item.empty::before{ content:''; position:absolute; inset:0; background:url('img/logo.png') center 42%/55% no-repeat; opacity:.12; }
-  .gal-item.empty::after{ content:'Foto próximamente'; position:absolute; top:58%; left:0; right:0; text-align:center; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-faint); }
+  .gal-item figcaption{ position:absolute; left:0; right:0; bottom:0; padding:28px 16px 14px; font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-soft); background:linear-gradient(transparent, rgba(0,0,0,0.85)); pointer-events:none; }
+  .gal-msg{ color:var(--text-faint); font-size:13px; padding:20px 4px; }
   .gallery .carousel-arrows.prev{ left:-25px; }
   .gallery .carousel-arrows.next{ right:-25px; }
   @media (max-width:1000px){ .gal-item{ flex-basis:calc((100% - 32px) / 3); } }
-  @media (max-width:700px){ .gal-item{ flex-basis:78%; } }
+  @media (max-width:700px){
+    .gal-item{ flex-basis:78%; }
+    /* en celular las flechas se ven, chicas y dentro de la galería */
+    .gallery .carousel-arrows{ display:flex; width:40px; height:40px; font-size:22px; background:rgba(0,0,0,0.75); }
+    .gallery .carousel-arrows.prev{ left:6px; }
+    .gallery .carousel-arrows.next{ right:6px; }
+  }
 
   .lightbox{ position:fixed; inset:0; z-index:300; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(0,0,0,0.92); opacity:0; visibility:hidden; transition:opacity .3s ease, visibility .3s; }
   .lightbox.open{ opacity:1; visibility:visible; }
@@ -401,14 +403,22 @@
   .faq-item[open] summary::after{ transform:rotate(45deg); }
   .faq-item p{ padding:0 22px 20px; color:var(--text-dim); font-size:14px; line-height:1.7; }
 
-  /* ---------- PALABRA NEÓN (blanco con brillo RGB, estilo cartel de boliche) ---------- */
+  /* ---------- PALABRA NEÓN (brillo RGB con la fuente del título) ---------- */
   .neon{
-    display:inline-block; padding:0 .06em; line-height:1;
-    font-family:'Yellowtail',cursive; font-weight:400; font-size:1.3em;
+    display:inline-block; padding:0; line-height:inherit;
+    font-family:inherit; font-weight:inherit; font-size:inherit;
     text-transform:none; letter-spacing:0;
     color:#fff; -webkit-text-fill-color:#fff; background:none;
-    transform:rotate(-4deg);
     animation:neonRgb 3.6s ease-in-out infinite;
+  }
+  h1 .neon, h2 .neon, h3 .neon{
+    font-family:'Unbounded',sans-serif !important;
+    font-weight:inherit !important;
+    font-size:inherit !important;
+    font-style:normal !important;
+    text-transform:inherit !important;
+    letter-spacing:inherit !important;
+    transform:none !important;
   }
   @keyframes neonRgb{
     0%,100%{ text-shadow:0 0 4px #fff, 0 0 12px rgba(59,130,246,0.95), 0 0 26px rgba(59,130,246,0.7); }
@@ -431,11 +441,9 @@
   @keyframes loaderPulse{ 0%,100%{ transform:scale(.92); filter:drop-shadow(0 0 6px rgba(217,173,75,0.35)); } 50%{ transform:scale(1.04); filter:drop-shadow(0 0 18px rgba(243,207,130,0.8)); } }
   @keyframes loaderBlink{ 0%,100%{ opacity:.45; } 50%{ opacity:1; } }
   @media (prefers-reduced-motion: reduce){ .loader-spin::before, .loader-spin img, .loader-text{ animation:none; } }
-  /* ---------- TEXTO DEL HERO (cursiva + servicios en RGB) ---------- */
-  .hero-desc{ font-family:'Playfair Display',serif; font-style:italic; font-weight:500; font-size:17px; line-height:1.6; color:#f2efe8; }
-  .rgb-text{ font-weight:700; background:linear-gradient(90deg,#60a5fa,#f472b6,#4ade80,#f3cf82,#60a5fa); background-size:300% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; -webkit-box-decoration-break:clone; box-decoration-break:clone; animation:rgbShift 5s linear infinite; }
-  @keyframes rgbShift{ to{ background-position:300% 0; } }
-  @media (prefers-reduced-motion: reduce){ .rgb-text{ animation:none; } }
+  /* ---------- TEXTO DEL HERO (cursiva + blanco) ---------- */
+  .hero-desc{ font-family:'Playfair Display',serif; font-style:italic; font-weight:500; font-size:19px; line-height:1.6; color:#fff; }
+  .rgb-text{ font-weight:700; color:#fff; background:none; -webkit-text-fill-color:#fff; }
 
   /* ---------- WHATSAPP FLOTANTE ---------- */
   .whatsapp-float{ position:fixed; bottom:22px; right:22px; z-index:200; width:64px; height:64px; border-radius:50%; overflow:hidden; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 26px -6px rgba(0,0,0,0.6); transition:transform .3s var(--ease); background:#000; }
@@ -513,10 +521,10 @@
       <p>Instalamos, operamos y desarmamos. Cada servicio llega completo a tu evento, listo para funcionar.</p>
     </div>
     <div class="services-grid" id="servicesGrid">
-      <div class="service-chip"><div class="num">01</div><h3>Plataforma 360°</h3><p>La instalamos, grabamos y tus invitados se llevan el video al instante.</p></div>
-      <div class="service-chip"><div class="num">02</div><h3>Cabina Fotográfica</h3><p>Cabina, operador y fotos impresas en el momento.</p></div>
-      <div class="service-chip"><div class="num">03</div><h3>Stand Glitter</h3><p>Glitter y brillo en vivo para que todos salgan protagonistas.</p></div>
-      <div class="service-chip"><div class="num">04</div><h3>Show Depredador LED</h3><p>30 minutos de coreografía, luces y humo que cortan la fiesta en dos.</p></div>
+      <div class="service-chip"><div class="num">01</div><h3>Plataforma 360°</h3><p>¡Subite a la diversión! Grabamos los mejores ángulos de tus invitados y les enviamos el video al celu en segundos para romper las redes.</p></div>
+      <div class="service-chip"><div class="num">02</div><h3>Cabina Fotográfica</h3><p>Risas, accesorios divertidos y fotos impresas al instante. El recuerdo perfecto que tus invitados se van a llevar a su casa.</p></div>
+      <div class="service-chip"><div class="num">03</div><h3>Stand Glitter</h3><p>Dale un toque único a tu evento. Nuestro equipo maquilla a todos con glitter y brillos para que la pista explote de energía.</p></div>
+      <div class="service-chip"><div class="num">04</div><h3>Show Depredador LED</h3><p>Un show único que corta la noche en dos. Luces, zancos, efectos y la mejor onda para dejar a todos boquiabiertos.</p></div>
     </div>
   </div>
 </section>
@@ -546,9 +554,9 @@
             <h2>Plataforma 360°</h2>
             <p>La llevamos, la instalamos y la operamos toda la noche. Tus invitados suben, giran y se llevan un video de altísima calidad directo al celular.</p>
             <div class="stage-features">
-              <div class="stage-feat"><b>Grabación en alta calidad</b><span>Video profesional listo para compartir al instante.</span></div>
-              <div class="stage-feat"><b>Iluminación LED integrada</b><span>Cada toma sale con el brillo del show.</span></div>
-              <div class="stage-feat"><b>Descarga por QR</b><span>Cada invitado se lleva su video al toque.</span></div>
+              <div class="stage-feat"><b>Grabación en alta calidad</b><span>Captura cada momento con una calidad increíble, listo para compartir.</span></div>
+              <div class="stage-feat"><b>Iluminación &amp; accesorios</b><span>Luz LED que realza cada toma y accesorios luminosos para disfrutar al máximo.</span></div>
+              <div class="stage-feat"><b>Descarga instantánea</b><span>Escaneá el QR y llevate tu video al instante.</span></div>
             </div>
             <a href="#contacto" class="btn btn-ghost">Consultar disponibilidad</a>
           </div>
@@ -558,11 +566,11 @@
           <div class="stage-inner">
             <span class="stage-badge">Servicio 02 — Fotos al instante</span>
             <h2>Cabina Fotográfica</h2>
-            <p>Otra que llevamos entera a tu evento: cabina, operador y cotillón premium. Recuerdos físicos, impresos en el momento.</p>
+            <p>Llevamos diversión y alegría a tu fiesta. Capturá los mejores momentos y regalale a tus invitados un recuerdo físico impreso en el acto para conservar para siempre.</p>
             <div class="stage-features">
-              <div class="stage-feat"><b>Operador incluido</b><span>Durante todo el tiempo contratado.</span></div>
-              <div class="stage-feat"><b>Fotos 2x6 ilimitadas</b><span>Impresas al instante, sin límite.</span></div>
-              <div class="stage-feat"><b>Diseño personalizado</b><span>Adaptado a los gustos de tu evento.</span></div>
+              <div class="stage-feat"><b>Operador incluido</b><span>Asistencia permanente durante el tiempo contratado para guiar a tus invitados.</span></div>
+              <div class="stage-feat"><b>Fotos ilimitadas</b><span>Impresiones de alta calidad en el acto y sin límite de cantidad durante el servicio.</span></div>
+              <div class="stage-feat"><b>Diseño personalizado</b><span>Plantillas de fotos adaptadas a la temática, colores y estilo de tu Evento.</span></div>
             </div>
             <a href="#contacto" class="btn btn-ghost">Solicitar cotización</a>
           </div>
@@ -607,9 +615,9 @@
             <h2>Show Depredador LED</h2>
             <p>30 minutos de pura adrenalina. Una intro misteriosa, coreografías exclusivas y un limbo LED interactivo que pone a bailar a todos tus invitados.</p>
             <div class="stage-features">
-              <div class="stage-feat"><b>Intro de impacto</b><span>Entrada misteriosa con impacto visual y sonoro.</span></div>
-              <div class="stage-feat"><b>Coreografía en vivo</b><span>Exclusiva, al ritmo real de tu fiesta.</span></div>
-              <div class="stage-feat"><b>Limbo LED interactivo</b><span>Los invitados participan del show.</span></div>
+              <div class="stage-feat"><b>Intro de impacto</b><span>Una entrada imponente y misteriosa con gran despliegue visual que captura todas las miradas.</span></div>
+              <div class="stage-feat"><b>Coreografía en vivo</b><span>Bailes y puesta en escena diseñados para contagiar energía y levantar la pista al máximo.</span></div>
+              <div class="stage-feat"><b>Limbo LED interactivo</b><span>Divertir y hacer participar activamente a tus invitados es el corazón del show.</span></div>
             </div>
             <a href="#contacto" class="btn btn-gold">Reservar mi fecha</a>
           </div>
@@ -623,29 +631,19 @@
 </section>
 
 <!-- ================= GALERÍA ================= -->
-<!-- Para cargar fotos: guardarlas en img/galeria/ con estos nombres (01.jpg, 02.jpg...).
-     Mientras no exista el archivo se muestra un espacio "Foto próximamente".
-     Para sumar más, copiar un <figure> y cambiar el número. -->
+<!-- Las fotos se cargan solas desde la carpeta img2/ (ver bloque GALERÍA en el script).
+     Nombres: plataforma1.png, cabinafotografica1.jpg, glitter1.jpg, robot1.png ... -->
 <section class="services-section" id="galeria">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="eyebrow">Galería</span>
-      <h2>Así se viven nuestros <span class="neon">shows</span></h2>
+      <h2>Así se viven nuestros <span class="neon">Servicios</span></h2>
       <p>Fotos reales de eventos coronados.</p>
     </div>
-    <div class="gallery reveal">
+    <div class="gallery reveal" id="galleryBox">
       <button class="carousel-arrows prev" id="galPrev" aria-label="Fotos anteriores">‹</button>
       <button class="carousel-arrows next" id="galNext" aria-label="Fotos siguientes">›</button>
-      <div class="gal-track" id="galTrack">
-        <figure class="gal-item"><img src="img/galeria/01.jpg" alt="Plataforma 360° en un evento" loading="lazy"><figcaption>Plataforma 360°</figcaption></figure>
-        <figure class="gal-item"><img src="img/galeria/02.jpg" alt="Cabina fotográfica en un evento" loading="lazy"><figcaption>Cabina Fotográfica</figcaption></figure>
-        <figure class="gal-item"><img src="img/galeria/03.jpg" alt="Stand glitter en un evento" loading="lazy"><figcaption>Stand Glitter</figcaption></figure>
-        <figure class="gal-item"><img src="img/galeria/04.jpg" alt="Show Depredador LED en un evento" loading="lazy"><figcaption>Show Depredador LED</figcaption></figure>
-        <figure class="gal-item"><img src="img/galeria/05.jpg" alt="Plataforma 360° en un evento" loading="lazy"><figcaption>Plataforma 360°</figcaption></figure>
-        <figure class="gal-item"><img src="img/galeria/06.jpg" alt="Cabina fotográfica en un evento" loading="lazy"><figcaption>Cabina Fotográfica</figcaption></figure>
-        <figure class="gal-item"><img src="img/galeria/07.jpg" alt="Stand glitter en un evento" loading="lazy"><figcaption>Stand Glitter</figcaption></figure>
-        <figure class="gal-item"><img src="img/galeria/08.jpg" alt="Show Depredador LED en un evento" loading="lazy"><figcaption>Show Depredador LED</figcaption></figure>
-      </div>
+      <div class="gal-track" id="galTrack"></div>
     </div>
   </div>
 </section>
@@ -716,8 +714,8 @@
   <div class="stage-beams"><span></span><span></span><span></span><span></span></div>
   <div class="smoke"><span></span><span></span><span></span></div>
   <div class="wrap stage-inner">
-    <h2 class="reveal"><span class="grad">Tu evento merece su show</span> <span class="neon">coronado</span></h2>
-    <p class="reveal stage-cta-copy">Contanos qué estás festejando y armamos el show ideal. Sin vueltas, directo por WhatsApp.</p>
+    <h2 class="reveal"><span class="grad">Tu evento merece terminar</span> <span class="neon">a lo grande</span></h2>
+    <p class="reveal stage-cta-copy">Contanos qué estás festejando y armamos el combo ideal. Sin vueltas, directo por WhatsApp.</p>
     <div class="reveal" style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
       <a href="#" class="btn btn-gold">Quiero cotizar mi evento</a>
       <a href="#" class="btn btn-ghost">Consultar disponibilidad</a>
@@ -731,25 +729,27 @@
     <div class="footer-left">
       <div class="footer-brand">
         <a href="#inicio" class="logo"><img src="img/logo.png" alt="Eventos Coronados" class="logo-img"></a>
-        <p>Shows y entretenimiento que llevamos a tu evento.</p>
+        <p style="max-width:460px;">Eventos Coronados — Shows y entretenimiento para tu fiesta.</p>
+        <p style="max-width:460px;">📍 Tigre, Buenos Aires. ¡Llegamos a todo Buenos Aires!</p>
+        <p style="max-width:460px;">🚚 ¿Estás lejos? ¡Consultanos y te pasamos presupuesto!</p>
       </div>
     </div>
     <div class="footer-right">
       <a class="footer-social instagram" href="https://www.instagram.com/eventoscoronados/" target="_blank" rel="noopener" aria-label="Instagram">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.15" fill="currentColor"/></svg>
       </a>
-      <a class="footer-social whatsapp" href="https://wa.me/5549115220407?text=Hola%2C%20vengo%20de%20la%20pagina%20web%20y%20me%20gustar%C3%ADa%20contactarme%20con%20ustedes" target="_blank" rel="noopener" aria-label="WhatsApp">
+      <a class="footer-social whatsapp" href="https://wa.me/5491152204075?text=Hola%2C%20vengo%20de%20la%20pagina%20web%20y%20me%20gustar%C3%ADa%20contactarme%20con%20ustedes" target="_blank" rel="noopener" aria-label="WhatsApp">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a10 10 0 0 0-8.62 15.1L2 22l5.05-1.33A10 10 0 1 0 12 2Z" stroke="currentColor" stroke-width="1.6"/><path d="M8.3 8.4c.2-.5.4-.5.6-.5h.5c.16 0 .38 0 .55.42.2.5.68 1.7.74 1.83.06.13.1.28.02.45-.08.17-.13.28-.26.42-.13.14-.27.32-.39.43-.13.13-.26.27-.11.53.14.26.63 1.06 1.36 1.72.94.85 1.72 1.11 1.98 1.24.26.13.42.11.57-.06.16-.18.66-.76.84-1.02.18-.26.35-.22.6-.13.24.09 1.55.74 1.82.87.26.14.43.2.5.31.06.11.06.65-.15 1.28-.21.63-1.24 1.2-1.72 1.27-.44.07-1 .1-1.62-.1-.37-.12-.86-.28-1.48-.55-2.6-1.14-4.3-3.77-4.44-3.95-.13-.17-1.06-1.41-1.06-2.7 0-1.28.65-1.9.88-2.16Z" fill="currentColor"/></svg>
       </a>
     </div>
   </div>
   <div class="wrap footer-bottom">
-    <div class="footer-copyright"><span class="copy-mark">©</span><span>Todos los derechos reservados.</span></div>
+    <div class="footer-copyright"><span class="copy-mark">©</span><span>2027 Eventos Coronados. Todos los derechos reservados.</span></div>
     <div class="footer-author">Desarrollado por Mateo Deris - Software Developer</div>
   </div>
 </footer>
 
-<a href="https://wa.me/5549115220407?text=Hola%2C%20vengo%20de%20la%20pagina%20web%20y%20me%20gustar%C3%ADa%20contactarme%20con%20ustedes" class="whatsapp-float" aria-label="Hablar por WhatsApp" target="_blank" rel="noopener">
+<a href="https://wa.me/5491152204075?text=Hola%2C%20vengo%20de%20la%20pagina%20web%20y%20me%20gustar%C3%ADa%20contactarme%20con%20ustedes" class="whatsapp-float" aria-label="Hablar por WhatsApp" target="_blank" rel="noopener">
   <img src="img/btn-wsp.jpg" alt="WhatsApp">
 </a>
 
@@ -793,7 +793,7 @@
   overlay.addEventListener('click', closeMenu);
   menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 
-  const whatsappNumber = '5549115220407';
+  const whatsappNumber = '5491152204075';
   const whatsappMessage = 'Hola, vengo de la pagina web y me gustaría contactarme con ustedes';
   const whatsappUrl = 'https://wa.me/' + whatsappNumber + '?text=' + encodeURIComponent(whatsappMessage);
   document.querySelectorAll('[data-whatsapp-link], .whatsapp-float, .footer-social.whatsapp').forEach(link => {
@@ -889,16 +889,140 @@
   }, {passive:true});
 
   // ---------- GALERÍA ----------
-  const galTrack = document.getElementById('galTrack');
-  const galStep = () => galTrack.querySelector('.gal-item').offsetWidth + 16;
-  document.getElementById('galPrev').addEventListener('click', () => galTrack.scrollBy({left:-galStep()}));
-  document.getElementById('galNext').addEventListener('click', () => galTrack.scrollBy({left:galStep()}));
+  // Fotos de la carpeta img2/, en este orden y con esta cantidad:
+  //   Plataforma 360°      -> plataforma1, plataforma2                         (2)
+  //   Cabina Fotográfica   -> cabinafotografica1 ... cabinafotografica4        (4)
+  //   Stand Glitter        -> glitter1, glitter2                               (2)
+  //   Show Depredador LED  -> robot1, robot2, robot3                           (3)
+  // Cada foto se busca con y sin espacio antes del número y con cualquier extensión.
+  // Si sumás fotos nuevas, subí el "count" de su categoría.
+  const GALERIA_DIR = 'img2/';
+  const GALERIA = [
+    { label:'Plataforma 360°',     prefix:'plataforma',        count:2 },
+    { label:'Cabina Fotográfica',  prefix:'cabinafotografica', count:4 },
+    { label:'Stand Glitter',       prefix:'glitter',           count:2 },
+    { label:'Show Depredador LED', prefix:'robot',             count:3 }
+  ];
+  const GAL_EXTS = ['jpg','png','jpeg','webp','JPG','PNG','JPEG','WEBP'];
+  const GAL_SEPS = ['',' '];   // "robot1" o "robot 1"
+  const GAL_AUTO_MS = 3500;    // cada cuántos milisegundos avanza sola (3500 = 3,5 segundos)
 
-  // fotos que todavía no existen quedan como espacio "Foto próximamente"
-  galTrack.querySelectorAll('.gal-item img').forEach(img => {
-    const markEmpty = () => img.parentElement.classList.add('empty');
-    if(img.complete && img.naturalWidth === 0) markEmpty();
-    img.addEventListener('error', markEmpty);
+  const galTrack = document.getElementById('galTrack');
+  const galPrev  = document.getElementById('galPrev');
+  const galNext  = document.getElementById('galNext');
+  const galBox   = document.getElementById('galleryBox');
+
+  const canLoad = (url) => new Promise(res => {
+    const im = new Image();
+    im.onload = () => res(true);
+    im.onerror = () => res(false);
+    im.src = url;
+  });
+  const galUrl = (prefix, sep, n, ext) => GALERIA_DIR + encodeURIComponent(prefix + sep + n) + '.' + ext;
+
+  // Busca una foto concreta probando separadores y extensiones
+  async function findPhoto(prefix, n){
+    for(const sep of GAL_SEPS){
+      for(const ext of GAL_EXTS){
+        const u = galUrl(prefix, sep, n, ext);
+        if(await canLoad(u)) return u;
+      }
+    }
+    return null;
+  }
+
+  // Carga las fotos 1..count de una categoría (si falta una, avisa en consola y sigue con la siguiente)
+  async function loadCategory(cat){
+    const found = [];
+    for(let n = 1; n <= cat.count; n++){
+      const url = await findPhoto(cat.prefix, n);
+      if(url){ found.push({ src:url, label:cat.label, n:n }); }
+      else { console.warn('[Galería] No se encontró: ' + GALERIA_DIR + cat.prefix + n + ' (revisá nombre y extensión)'); }
+    }
+    return found;
+  }
+
+  // --- Movimiento del carrusel (con vuelta al inicio / al final) ---
+  const galStep = () => {
+    const item = galTrack.querySelector('.gal-item');
+    return item ? item.offsetWidth + 16 : galTrack.clientWidth;
+  };
+  const galMax = () => Math.max(0, galTrack.scrollWidth - galTrack.clientWidth);
+  const galAtEnd = () => galTrack.scrollLeft >= galMax() - 4;
+  const galAtStart = () => galTrack.scrollLeft <= 4;
+
+  function galGoNext(){
+    if(galAtEnd()) galTrack.scrollTo({ left:0, behavior:'smooth' });          // al final -> vuelve al inicio
+    else galTrack.scrollBy({ left: galStep(), behavior:'smooth' });
+  }
+  function galGoPrev(){
+    if(galAtStart()) galTrack.scrollTo({ left:galMax(), behavior:'smooth' }); // al inicio -> salta al final
+    else galTrack.scrollBy({ left:-galStep(), behavior:'smooth' });
+  }
+
+  // --- Deslizamiento automático ---
+  let galTimer = null;
+  let galVisible = false;
+  function galAutoTick(){
+    if(document.hidden || !galVisible) return;
+    if(document.getElementById('lightbox').classList.contains('open')) return;
+    galGoNext();
+  }
+  function galStopAuto(){ if(galTimer){ clearInterval(galTimer); galTimer = null; } }
+  function galStartAuto(){
+    galStopAuto();
+    if(reduceMotion) return;
+    galTimer = setInterval(galAutoTick, GAL_AUTO_MS);
+  }
+
+  // Flechas: mueven y reinician el contador del automático
+  galPrev.addEventListener('click', () => { galGoPrev(); galStartAuto(); });
+  galNext.addEventListener('click', () => { galGoNext(); galStartAuto(); });
+
+  // Táctil / mouse: mientras el usuario arrastra se frena, al soltar se reanuda
+  galTrack.addEventListener('touchstart', galStopAuto, {passive:true});
+  galTrack.addEventListener('touchend', galStartAuto, {passive:true});
+  galTrack.addEventListener('touchcancel', galStartAuto, {passive:true});
+  galTrack.addEventListener('wheel', galStartAuto, {passive:true});
+
+  // Solo avanza sola cuando la galería está a la vista
+  if('IntersectionObserver' in window){
+    const galIo = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { galVisible = entry.isIntersecting; });
+    }, {threshold:0.25});
+    galIo.observe(galBox);
+  } else { galVisible = true; }
+
+  Promise.all(GALERIA.map(loadCategory)).then(results => {
+    const frag = document.createDocumentFragment();
+    let total = 0;
+    results.forEach(list => {
+      list.forEach(p => {
+        const fig = document.createElement('figure');
+        fig.className = 'gal-item';
+        const img = document.createElement('img');
+        img.src = p.src;
+        img.alt = p.label + ' - foto ' + p.n;
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        const cap = document.createElement('figcaption');
+        cap.textContent = p.label;
+        fig.appendChild(img);
+        fig.appendChild(cap);
+        frag.appendChild(fig);
+        total++;
+      });
+    });
+    console.info('[Galería] Fotos cargadas: ' + total + ' de ' + GALERIA.reduce((s, c) => s + c.count, 0));
+    if(total === 0){
+      const msg = document.createElement('p');
+      msg.className = 'gal-msg';
+      msg.textContent = 'Próximamente vas a ver acá fotos de nuestros eventos.';
+      galTrack.appendChild(msg);
+      return;
+    }
+    galTrack.appendChild(frag);
+    galStartAuto();
   });
 
   const lightbox = document.getElementById('lightbox');
@@ -906,7 +1030,7 @@
   function closeLightbox(){ lightbox.classList.remove('open'); lightbox.setAttribute('aria-hidden','true'); }
   galTrack.addEventListener('click', (e) => {
     const item = e.target.closest('.gal-item');
-    if(!item || item.classList.contains('empty')) return;
+    if(!item) return;
     const img = item.querySelector('img');
     lightboxImg.src = img.src; lightboxImg.alt = img.alt;
     lightbox.classList.add('open'); lightbox.setAttribute('aria-hidden','false');

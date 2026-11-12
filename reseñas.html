@@ -64,7 +64,6 @@
   .nav-inner{ display:flex; align-items:center; justify-content:space-between; gap:20px; }
   .logo{ display:flex; align-items:center; gap:9px; cursor:pointer; }
   .logo-img{ height:80px; width:auto; object-fit:contain; filter:drop-shadow(0 0 8px rgba(217,173,75,0.3)); }
-  footer .logo-img{ height:44px; }
   .nav-right{ display:flex; align-items:center; gap:14px; }
   .nav-right .btn{ padding:10px 20px; font-size:12px; }
   .burger{ display:flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:10px; border:1px solid var(--line); background:rgba(255,255,255,0.03); position:relative; cursor:pointer; flex:0 0 auto; }
@@ -157,11 +156,48 @@
   .thanks-crown img{ height:60px; width:auto; margin:0 auto; filter:drop-shadow(0 0 10px rgba(217,173,75,0.5)); }
 
   /* ---------- FOOTER ---------- */
-  footer{ padding:44px 0 30px; border-top:1px solid var(--line); position:relative; z-index:2; }
-  .footer-inner{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px; }
-  .footer-bottom{ margin-top:30px; padding-top:18px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; font-size:11.5px; color:var(--text-faint); }
-  .dev-credit{ display:flex; align-items:center; gap:6px; }
-  @media (max-width:700px){ .footer-inner{ flex-direction:column; text-align:center; } .footer-bottom{ flex-direction:column; text-align:center; } }
+  footer .logo-img{ height:44px; }
+  footer{ position:relative; z-index:2; padding:56px 0 30px; background:var(--bg); }
+  footer::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, transparent 0%, rgba(243,207,130,0.9) 12%, rgba(59,130,246,0.9) 35%, rgba(236,72,153,0.9) 60%, rgba(34,197,94,0.9) 82%, transparent 100%);
+    box-shadow:0 0 14px rgba(243,207,130,0.45), 0 0 18px rgba(59,130,246,0.24), 0 0 18px rgba(236,72,153,0.2);
+    animation:footerRgbLine 2.8s steps(1,end) infinite;
+  }
+  @keyframes footerRgbLine{
+    0%, 18%{ opacity:1; }
+    23%, 42%{ opacity:.8; }
+    47%, 66%{ opacity:1; }
+    70%, 100%{ opacity:.7; }
+  }
+  .footer-wrap{ display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap; }
+  .footer-left{ display:flex; flex-direction:column; align-items:flex-start; gap:14px; }
+  .footer-brand{ display:flex; flex-direction:column; align-items:flex-start; gap:10px; }
+  .footer-brand p{ margin-top:4px; font-size:13.5px; max-width:360px; color:#f2efe8; }
+  .footer-right{ margin-left:auto; display:flex; align-items:center; gap:12px; }
+  .footer-social{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:46px; height:46px; border-radius:50%;
+    border:1px solid rgba(255,255,255,0.14);
+    background:rgba(255,255,255,0.03);
+    color:var(--text);
+    transition:transform .3s var(--ease), border-color .3s ease, box-shadow .3s ease, color .3s ease, background .3s ease;
+  }
+  .footer-social svg{ width:20px; height:20px; }
+  .footer-social:hover{
+    transform:translateY(-3px);
+    border-color:transparent;
+    color:#fff;
+    background:linear-gradient(45deg,#f9ce34,#ee2a7b,#6228d7);
+    box-shadow:0 10px 26px -8px rgba(238,42,123,0.55);
+  }
+  .footer-social.whatsapp:hover{ background:#25d366; box-shadow:0 10px 26px -8px rgba(37,211,102,0.55); }
+  .footer-bottom{ margin-top:30px; padding-top:20px; border-top:1px solid var(--line); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; font-size:11.5px; color:var(--text-faint); text-align:center; }
+  .footer-copyright{ display:inline-flex; align-items:center; justify-content:center; gap:8px; color:#f5f5f5; font-size:14px; font-weight:700; letter-spacing:0.04em; }
+  .copy-mark{ font-size:16px; color:#fff; line-height:1; }
+  .footer-author{ font-size:11px; font-weight:600; letter-spacing:0.04em; color:var(--gold-soft); }
+  @media (prefers-reduced-motion: reduce){ footer::before{ animation:none; } }
+  @media (max-width:700px){ .footer-wrap{ flex-direction:column; align-items:flex-start; } .footer-left{ align-items:flex-start; } .footer-right{ margin-left:0; width:auto; } }
 
   .reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
   .reveal.in{ opacity:1; transform:translateY(0); }
@@ -197,6 +233,7 @@
   }
   @media (max-width:480px){
     .logo-img{ height:56px; }
+    footer .logo-img{ height:44px; }
     .resenas-hero{ padding:130px 0 32px; }
     .thanks-section{ padding:60px 0 70px; }
   }
@@ -206,11 +243,10 @@
   }
   /* ---------- PALABRA NEÓN (blanco con brillo RGB, estilo cartel de boliche) ---------- */
   .neon{
-    display:inline-block; padding:0 .06em; line-height:1;
-    font-family:'Yellowtail',cursive; font-weight:400; font-size:1.3em;
-    text-transform:none; letter-spacing:0;
+    display:inline-block; padding:0 .06em; line-height:inherit;
+    font-family:inherit; font-weight:inherit; font-size:inherit;
+    text-transform:inherit; letter-spacing:inherit;
     color:#fff; -webkit-text-fill-color:#fff; background:none;
-    transform:rotate(-4deg);
     animation:neonRgb 3.6s ease-in-out infinite;
   }
   @keyframes neonRgb{
@@ -292,9 +328,10 @@
         <button type="button" data-value="5">★</button>
       </div>
       <div class="rate-feedback" id="rateFeedback">&nbsp;</div>
-      <input type="text" placeholder="Tu nombre">
-      <textarea placeholder="Contanos tu experiencia..."></textarea>
-      <button type="button" class="btn btn-gold" style="width:100%;">Enviar reseña</button>
+      <input type="text" id="rateName" placeholder="Tu nombre" maxlength="60" autocomplete="name">
+      <textarea id="rateText" placeholder="Contanos tu experiencia..." maxlength="600"></textarea>
+      <input type="text" id="rateWeb" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;width:0;height:0;padding:0;margin:0;border:0;">
+      <button type="button" class="btn btn-gold" id="rateSubmit" style="width:100%;">Enviar reseña</button>
     </div>
   </div>
 </section>
@@ -313,53 +350,7 @@
       <button class="rev-arrows next" id="revNext" aria-label="Siguiente">›</button>
 
       <div class="rev-viewport">
-        <div class="rev-track" id="revTrack">
-
-          <div class="rev-slide" data-fecha="2026-07-05">
-            <div class="rev-card">
-              <div class="stars">★★★★★</div>
-              <p class="quote">El Show Depredador LED rompió todo, posta. La gente no paraba de bailar, quedaron todos re copados. Si querés que la fiesta se corte en dos, contratalos ya, son un golazo.</p>
-              <div class="client">
-                <div class="rev-avatar">MJ</div>
-                <div><div class="client-name">María José</div></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="rev-slide" data-fecha="2026-07-20">
-            <div class="rev-card">
-              <div class="stars">★★★★★</div>
-              <p class="quote">La cabina fotográfica no paró en toda la noche, la fila no se cortaba ni en pedo. Las fotos quedaron un caño y el pibe que la manejaba, un fenómeno total.</p>
-              <div class="client">
-                <div class="rev-avatar">FL</div>
-                <div><div class="client-name">Franco Lucero</div></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="rev-slide" data-fecha="2026-08-02">
-            <div class="rev-card">
-              <div class="stars">★★★★★</div>
-              <p class="quote">Contratamos la plataforma 360° y el stand glitter premium y quedó de diez. Llegaron re puntuales, armaron todo solos y no tuvimos que hacernos drama por nada.</p>
-              <div class="client">
-                <div class="rev-avatar">CB</div>
-                <div><div class="client-name">Carla Benítez</div></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="rev-slide" data-fecha="2026-08-14">
-            <div class="rev-card">
-              <div class="stars">★★★★★</div>
-              <p class="quote">Un equipo diez puntos, laburaron impecable de principio a fin, ni un detalle se les pasó. La coreo en vivo del show LED nos dejó a todos con la boca abierta, tal cual como lo habían prometido.</p>
-              <div class="client">
-                <div class="rev-avatar">DP</div>
-                <div><div class="client-name">Diego Paredes</div></div>
-              </div>
-            </div>
-          </div>
-
-        </div>
+        <div class="rev-track" id="revTrack"></div>
       </div>
 
       <div class="rev-dots" id="revDots"></div>
@@ -378,17 +369,31 @@
 
 <!-- ================= FOOTER ================= -->
 <footer>
-  <div class="wrap footer-inner">
-    <a href="index.html" class="logo"><img src="img/logo.png" alt="Eventos Coronados" class="logo-img"></a>
-    <p style="font-size:13px; color:var(--text-faint); max-width:280px;">Shows y entretenimiento que llevamos a tu evento.</p>
+  <div class="wrap footer-wrap">
+    <div class="footer-left">
+      <div class="footer-brand">
+        <a href="index.html" class="logo"><img src="img/logo.png" alt="Eventos Coronados" class="logo-img"></a>
+        <p style="max-width:460px;">Eventos Coronados — Shows y entretenimiento para tu fiesta.</p>
+        <p style="max-width:460px;">📍 Tigre, Buenos Aires. ¡Llegamos a todo Buenos Aires!</p>
+        <p style="max-width:460px;">🚚 ¿Estás lejos? ¡Consultanos y te pasamos presupuesto!</p>
+      </div>
+    </div>
+    <div class="footer-right">
+      <a class="footer-social instagram" href="https://www.instagram.com/eventoscoronados/" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.15" fill="currentColor"/></svg>
+      </a>
+      <a class="footer-social whatsapp" href="https://wa.me/5491152204075?text=Hola%2C%20vengo%20de%20la%20pagina%20web%20y%20me%20gustar%C3%ADa%20contactarme%20con%20ustedes" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a10 10 0 0 0-8.62 15.1L2 22l5.05-1.33A10 10 0 1 0 12 2Z" stroke="currentColor" stroke-width="1.6"/><path d="M8.3 8.4c.2-.5.4-.5.6-.5h.5c.16 0 .38 0 .55.42.2.5.68 1.7.74 1.83.06.13.1.28.02.45-.08.17-.13.28-.26.42-.13.14-.27.32-.39.43-.13.13-.26.27-.11.53.14.26.63 1.06 1.36 1.72.94.85 1.72 1.11 1.98 1.24.26.13.42.11.57-.06.16-.18.66-.76.84-1.02.18-.26.35-.22.6-.13.24.09 1.55.74 1.82.87.26.14.43.2.5.31.06.11.06.65-.15 1.28-.21.63-1.24 1.2-1.72 1.27-.44.07-1 .1-1.62-.1-.37-.12-.86-.28-1.48-.55-2.6-1.14-4.3-3.77-4.44-3.95-.13-.17-1.06-1.41-1.06-2.7 0-1.28.65-1.9.88-2.16Z" fill="currentColor"/></svg>
+      </a>
+    </div>
   </div>
   <div class="wrap footer-bottom">
-    <span class="dev-credit">© 2026 Eventos Coronados. Todos los derechos reservados.</span>
-    <span class="dev-credit">Desarrollado por Mateo Deris — Software Developer</span>
+    <div class="footer-copyright"><span class="copy-mark">©</span><span>2027 Eventos Coronados. Todos los derechos reservados.</span></div>
+    <div class="footer-author">Desarrollado por Mateo Deris - Software Developer</div>
   </div>
 </footer>
 
-<a href="https://wa.me/5490000000000" class="whatsapp-float" aria-label="Hablar por WhatsApp" target="_blank" rel="noopener">
+<a href="https://wa.me/5491152204075?text=Hola%2C%20vengo%20de%20la%20pagina%20web" class="whatsapp-float" aria-label="Hablar por WhatsApp" target="_blank" rel="noopener">
   <img src="img/btn-wsp.jpg" alt="WhatsApp">
 </a>
 
@@ -466,43 +471,78 @@
   const prevBtn = document.getElementById('revPrev');
   const nextBtn = document.getElementById('revNext');
   const carouselWrap = document.querySelector('.rev-carousel');
+  let total = 0, current = 1, autoplayTimer = null;
 
-  // 1) Ordenar por fecha, más reciente primero
-  let realSlides = Array.from(track.children);
-  realSlides.sort((a, b) => new Date(b.dataset.fecha) - new Date(a.dataset.fecha));
-  realSlides.forEach(s => track.appendChild(s));
-  const total = realSlides.length;
-
-  // 2) Clonar primero y último para loop infinito fluido
-  const firstClone = realSlides[0].cloneNode(true);
-  const lastClone = realSlides[total - 1].cloneNode(true);
-  track.insertBefore(lastClone, realSlides[0]);
-  track.appendChild(firstClone);
-
-  let current = 1;
-  track.style.transform = 'translateX(-' + (current * 100) + '%)';
-
-  // 3) Puntos (uno por reseña real)
-  for(let i = 0; i < total; i++){
-    const dot = document.createElement('button');
-    if(i === 0) dot.classList.add('active');
-    dot.addEventListener('click', () => { goTo(i + 1); restartAutoplay(); });
-    dotsWrap.appendChild(dot);
+  function makeSlide(r){
+    const slide = document.createElement('div');
+    slide.className = 'rev-slide';
+    slide.innerHTML = '<div class="rev-card"><div class="stars"></div><p class="quote"></p><div class="client"><div class="rev-avatar"></div><div><div class="client-name"></div></div></div></div>';
+    const n = Math.max(1, Math.min(5, parseInt(r.estrellas, 10) || 5));
+    const nombre = String(r.nombre || 'Cliente').trim();
+    slide.querySelector('.stars').textContent = '★'.repeat(n);
+    slide.querySelector('.quote').textContent = String(r.texto || '');
+    slide.querySelector('.client-name').textContent = nombre;
+    slide.querySelector('.rev-avatar').textContent = nombre.split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+    return slide;
   }
-  const dots = dotsWrap.querySelectorAll('button');
+
+  function showMessage(text){
+    stopAutoplay();
+    total = 0; current = 0;
+    track.innerHTML = ''; dotsWrap.innerHTML = '';
+    const slide = document.createElement('div');
+    slide.className = 'rev-slide';
+    slide.innerHTML = '<div class="rev-card"><p class="quote" style="margin:0"></p></div>';
+    slide.querySelector('.quote').textContent = text;
+    track.appendChild(slide);
+    track.style.transition = 'none';
+    track.style.transform = 'translateX(0)';
+    track.offsetHeight;
+    track.style.transition = '';
+  }
 
   function updateDots(){
-    let real = ((current - 1) % total + total) % total;
-    dots.forEach((d, i) => d.classList.toggle('active', i === real));
+    const real = ((current - 1) % total + total) % total;
+    dotsWrap.querySelectorAll('button').forEach((d, i) => d.classList.toggle('active', i === real));
   }
 
   function goTo(index){
+    if(total < 2) return;
     current = index;
     track.style.transform = 'translateX(-' + (current * 100) + '%)';
     updateDots();
   }
 
+  function buildCarousel(list){
+    stopAutoplay();
+    // más recientes primero
+    list.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    const slides = list.map(makeSlide);
+    total = slides.length;
+    track.innerHTML = ''; dotsWrap.innerHTML = '';
+    // clones del último y del primero para el loop infinito
+    if(total > 1) track.appendChild(slides[total - 1].cloneNode(true));
+    slides.forEach(s => track.appendChild(s));
+    if(total > 1) track.appendChild(slides[0].cloneNode(true));
+    current = total > 1 ? 1 : 0;
+    track.style.transition = 'none';
+    track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    track.offsetHeight;
+    track.style.transition = '';
+    if(total > 1){
+      for(let i = 0; i < total; i++){
+        const dot = document.createElement('button');
+        dot.setAttribute('aria-label', 'Reseña ' + (i + 1));
+        dot.addEventListener('click', () => { goTo(i + 1); restartAutoplay(); });
+        dotsWrap.appendChild(dot);
+      }
+      updateDots();
+      startAutoplay();
+    }
+  }
+
   track.addEventListener('transitionend', () => {
+    if(total < 2) return;
     if(current === 0){
       track.style.transition = 'none';
       current = total;
@@ -521,11 +561,9 @@
   prevBtn.addEventListener('click', () => { goTo(current - 1); restartAutoplay(); });
   nextBtn.addEventListener('click', () => { goTo(current + 1); restartAutoplay(); });
 
-  let autoplayTimer = null;
-  function startAutoplay(){ if(reduceMotion) return; autoplayTimer = setInterval(() => goTo(current + 1), 5000); }
+  function startAutoplay(){ if(reduceMotion || total < 2 || autoplayTimer) return; autoplayTimer = setInterval(() => goTo(current + 1), 5000); }
   function stopAutoplay(){ if(autoplayTimer){ clearInterval(autoplayTimer); autoplayTimer = null; } }
   function restartAutoplay(){ stopAutoplay(); startAutoplay(); }
-  startAutoplay();
   carouselWrap.addEventListener('mouseenter', stopAutoplay);
   carouselWrap.addEventListener('mouseleave', startAutoplay);
 
@@ -537,6 +575,70 @@
     if(Math.abs(delta) > 50){ goTo(current + (delta < 0 ? 1 : -1)); restartAutoplay(); }
     touchX = null;
   }, {passive:true});
+
+  // ---------- CONEXIÓN DIRECTA A JSONBIN (reseñasweb EC) ----------
+  const BIN_ID = '6aee5428ac6210605a73b36c';
+  const ACCESS_KEY = '$2a$10$QQn2ilT/MJpvFslc7uZx3.CHZr1yfxbcbd02KLPPAM3u4W8p0WJIS'; // Access Key con permisos Read + Update SOLO de este BIN
+  const BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
+  const listOf = (rec) => Array.isArray(rec) ? rec : (rec && Array.isArray(rec.reviews) ? rec.reviews : []);
+
+  async function readBin(){
+    const res = await fetch(BIN_URL + '/latest', { headers: { 'X-Access-Key': ACCESS_KEY } });
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    return data.record && typeof data.record === 'object' ? data.record : {};
+  }
+
+  async function loadReviews(){
+    showMessage('Cargando reseñas...');
+    try{
+      const rec = await readBin();
+      const list = listOf(rec).filter(r => r && r.texto);
+      if(!list.length){ showMessage('Todavía no hay reseñas. ¡Sé el primero en dejar la tuya!'); return; }
+      buildCarousel(list);
+    }catch(err){
+      showMessage('No pudimos cargar las reseñas en este momento. Probá de nuevo en unos minutos.');
+    }
+  }
+  loadReviews();
+
+  // ---------- ENVÍO DE RESEÑA ----------
+  const submitBtn = document.getElementById('rateSubmit');
+  submitBtn.addEventListener('click', async () => {
+    const nombreEl = document.getElementById('rateName');
+    const textoEl = document.getElementById('rateText');
+    const nombre = nombreEl.value.trim().slice(0, 60);
+    const texto = textoEl.value.trim().slice(0, 600);
+    if(document.getElementById('rateWeb').value) return; // anti-bots
+    if(!selectedRating){ feedback.textContent = 'Elegí tu calificación con las estrellas'; return; }
+    if(nombre.length < 2 || texto.length < 5){ feedback.textContent = 'Completá tu nombre y tu experiencia'; return; }
+    const label = submitBtn.textContent;
+    submitBtn.disabled = true; submitBtn.textContent = 'Enviando...';
+    try{
+      // se lee primero y se agrega: nunca se pisan las reseñas existentes
+      const rec = await readBin();
+      const nueva = {
+        id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+        nombre, texto, estrellas: selectedRating,
+        fecha: new Date().toISOString().slice(0, 10)
+      };
+      const next = Array.isArray(rec) ? [...rec, nueva] : { ...rec, reviews: [...listOf(rec), nueva] };
+      const res = await fetch(BIN_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Access-Key': ACCESS_KEY },
+        body: JSON.stringify(next)
+      });
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      feedback.textContent = '¡Gracias por tu reseña! 👑';
+      nombreEl.value = ''; textoEl.value = '';
+      selectedRating = 0; paintStars(0);
+      loadReviews();
+    }catch(err){
+      feedback.textContent = 'No pudimos enviar tu reseña. Probá de nuevo en unos minutos.';
+    }finally{
+      submitBtn.disabled = false; submitBtn.textContent = label;
+    }
+  });
 })();
 </script>
 </body>
