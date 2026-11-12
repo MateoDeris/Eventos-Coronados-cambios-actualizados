@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,500;1,700&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="/img/favicon.png?v=2"><style>
+<link rel="icon" type="image/png" href="img/favicon.png?v=2"><style>
   :root{
     --bg:#030303; --panel:#0b0b0c; --line:rgba(255,255,255,0.07);
     --gold:#d9ad4b; --gold-soft:#f3cf82; --gold-dim:#7a5f26;
@@ -214,7 +214,7 @@
   .stage .smoke span:nth-child(3){ width:300px; height:300px; left:78%; top:5%; animation-duration:28s; animation-delay:-15s; }
   @keyframes drift{ 0%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(4%,-3%) scale(1.08); } 100%{ transform:translate(0,0) scale(1); } }
 
-  /* ---------- CARRUSEL DE SERVICIOS (reemplaza secciones separadas) ---------- */
+  /* ---------- CARRUSEL DE SERVICIOS (manual: flechas, pestañas, puntos y swipe) ---------- */
   .carousel-tabs{ position:relative; z-index:2; display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:44px; }
   .carousel-tabs button{ padding:10px 18px; border-radius:100px; border:1px solid var(--line); background:rgba(255,255,255,0.03); color:var(--text-dim); font-size:11.5px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; cursor:pointer; transition:.3s var(--ease); }
   .carousel-tabs button.active{ border-color:rgba(217,173,75,0.55); color:var(--gold-soft); background:rgba(217,173,75,0.09); }
@@ -256,10 +256,20 @@
   .carousel-arrows:hover{ color:var(--gold); background:#1a1a1a; transform:translateY(-50%) scale(1.15); box-shadow:0 6px 20px rgba(217,173,75,0.6); }
   .carousel-arrows.prev{ left:-30px; } 
   .carousel-arrows.next{ right:-30px; }
-  .carousel-dots{ position:relative; z-index:2; display:flex; justify-content:center; gap:8px; margin-top:34px; }
+
+  /* Controles inferiores: puntos (siempre) + flechas (solo celular) */
+  .carousel-controls{ position:relative; z-index:2; display:flex; align-items:center; justify-content:center; gap:18px; margin-top:34px; }
+  .carousel-dots{ position:relative; z-index:2; display:flex; justify-content:center; gap:8px; }
   .carousel-dots button{ width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,0.2); border:none; cursor:pointer; padding:0; }
   .carousel-dots button.active{ background:var(--gold-soft); box-shadow:0 0 8px 2px rgba(243,207,130,.6); }
-  @media (max-width:700px){ .carousel-arrows{ display:none; } .carousel-viewport{ overflow:hidden; } }
+  .carousel-nav{ display:none; flex:0 0 auto; width:46px; height:46px; border-radius:50%; border:1px solid rgba(255,255,255,0.18); background:#000; color:var(--gold-soft); font-size:26px; font-weight:bold; line-height:1; cursor:pointer; align-items:center; justify-content:center; box-shadow:0 4px 14px rgba(0,0,0,0.7); transition:border-color .3s ease, color .3s ease, transform .2s ease; -webkit-tap-highlight-color:transparent; }
+  .carousel-nav:active{ transform:scale(.92); border-color:var(--gold); color:var(--gold); }
+  @media (max-width:700px){
+    .carousel-arrows{ display:none; }
+    .carousel-nav{ display:flex; }
+    .carousel-controls{ gap:22px; margin-top:28px; }
+    .carousel-viewport{ overflow:hidden; }
+  }
 
   /* Carrusel "estilo boliche": sin dorado ambiental, acentos RGB, listo para imagen de fondo */
   .stage-club{ background:#050506; background-image:var(--services-bg, none); background-size:cover; background-position:center; background-repeat:no-repeat; }
@@ -368,7 +378,7 @@
   .reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
   .reveal.in{ opacity:1; transform:translateY(0); }
 
-  /* ---------- GALERÍA ---------- */
+  /* ---------- GALERÍA (manual: flechas + deslizar con el dedo) ---------- */
   .gallery{ position:relative; }
   .gal-track{ display:flex; gap:16px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; padding-bottom:6px; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
   .gal-track::-webkit-scrollbar{ display:none; }
@@ -543,8 +553,8 @@
     </div>
 
     <div class="carousel-viewport">
-      <button class="carousel-arrows prev" id="carPrev" aria-label="Anterior">‹</button>
-      <button class="carousel-arrows next" id="carNext" aria-label="Siguiente">›</button>
+      <button class="carousel-arrows prev js-car-prev" id="carPrev" aria-label="Anterior">‹</button>
+      <button class="carousel-arrows next js-car-next" id="carNext" aria-label="Siguiente">›</button>
 
       <div class="carousel-track" id="carouselTrack">
 
@@ -626,7 +636,12 @@
       </div>
     </div>
 
-    <div class="carousel-dots" id="carouselDots"></div>
+    <!-- Controles: puntos en todos los dispositivos + flechas en celular -->
+    <div class="carousel-controls">
+      <button class="carousel-nav js-car-prev" aria-label="Anterior">‹</button>
+      <div class="carousel-dots" id="carouselDots"></div>
+      <button class="carousel-nav js-car-next" aria-label="Siguiente">›</button>
+    </div>
   </div>
 </section>
 
@@ -843,19 +858,18 @@
     counters.forEach(c => statIo.observe(c));
   } else { counters.forEach(animateCount); }
 
-  // ---------- CARRUSEL DE SERVICIOS ----------
+  // ---------- CARRUSEL DE SERVICIOS (100% manual, sin autoplay) ----------
   const track = document.getElementById('carouselTrack');
   const tabs = document.querySelectorAll('#carouselTabs button');
   const dotsWrap = document.getElementById('carouselDots');
   const slides = track.querySelectorAll('.carousel-slide');
-  const prevBtn = document.getElementById('carPrev');
-  const nextBtn = document.getElementById('carNext');
   let current = 0;
 
   slides.forEach((_, i) => {
     const dot = document.createElement('button');
+    dot.setAttribute('aria-label', 'Ir al servicio ' + (i + 1));
     if(i === 0) dot.classList.add('active');
-    dot.addEventListener('click', () => { goTo(i); restartAutoplay(); });
+    dot.addEventListener('click', () => goTo(i));
     dotsWrap.appendChild(dot);
   });
   const dots = dotsWrap.querySelectorAll('button');
@@ -866,19 +880,12 @@
     tabs.forEach((t,i) => t.classList.toggle('active', i === current));
     dots.forEach((d,i) => d.classList.toggle('active', i === current));
   }
-  tabs.forEach(t => t.addEventListener('click', () => { goTo(parseInt(t.dataset.slide,10)); restartAutoplay(); }));
-  prevBtn.addEventListener('click', () => { goTo(current - 1); restartAutoplay(); });
-  nextBtn.addEventListener('click', () => { goTo(current + 1); restartAutoplay(); });
+  tabs.forEach(t => t.addEventListener('click', () => goTo(parseInt(t.dataset.slide,10))));
+  // flechas de desktop (laterales) y de celular (abajo)
+  document.querySelectorAll('.js-car-prev').forEach(b => b.addEventListener('click', () => goTo(current - 1)));
+  document.querySelectorAll('.js-car-next').forEach(b => b.addEventListener('click', () => goTo(current + 1)));
 
-  let autoplayTimer = null;
-  function startAutoplay(){ if(reduceMotion) return; autoplayTimer = setInterval(() => goTo(current + 1), 5000); }
-  function stopAutoplay(){ if(autoplayTimer){ clearInterval(autoplayTimer); autoplayTimer = null; } }
-  function restartAutoplay(){ stopAutoplay(); startAutoplay(); }
-  startAutoplay();
-  const carouselSection = document.getElementById('experiencias');
-  carouselSection.addEventListener('mouseenter', stopAutoplay);
-  carouselSection.addEventListener('mouseleave', startAutoplay);
-
+  // deslizar con el dedo (celular)
   let touchX = null;
   track.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, {passive:true});
   track.addEventListener('touchend', (e) => {
@@ -888,7 +895,7 @@
     touchX = null;
   }, {passive:true});
 
-  // ---------- GALERÍA ----------
+  // ---------- GALERÍA (100% manual, sin autoplay) ----------
   // Fotos de la carpeta img2/, en este orden y con esta cantidad:
   //   Plataforma 360°      -> plataforma1, plataforma2                         (2)
   //   Cabina Fotográfica   -> cabinafotografica1 ... cabinafotografica4        (4)
@@ -905,12 +912,10 @@
   ];
   const GAL_EXTS = ['jpg','png','jpeg','webp','JPG','PNG','JPEG','WEBP'];
   const GAL_SEPS = ['',' '];   // "robot1" o "robot 1"
-  const GAL_AUTO_MS = 3500;    // cada cuántos milisegundos avanza sola (3500 = 3,5 segundos)
 
   const galTrack = document.getElementById('galTrack');
   const galPrev  = document.getElementById('galPrev');
   const galNext  = document.getElementById('galNext');
-  const galBox   = document.getElementById('galleryBox');
 
   const canLoad = (url) => new Promise(res => {
     const im = new Image();
@@ -942,7 +947,7 @@
     return found;
   }
 
-  // --- Movimiento del carrusel (con vuelta al inicio / al final) ---
+  // --- Movimiento manual (con vuelta al inicio / al final) ---
   const galStep = () => {
     const item = galTrack.querySelector('.gal-item');
     return item ? item.offsetWidth + 16 : galTrack.clientWidth;
@@ -960,38 +965,8 @@
     else galTrack.scrollBy({ left:-galStep(), behavior:'smooth' });
   }
 
-  // --- Deslizamiento automático ---
-  let galTimer = null;
-  let galVisible = false;
-  function galAutoTick(){
-    if(document.hidden || !galVisible) return;
-    if(document.getElementById('lightbox').classList.contains('open')) return;
-    galGoNext();
-  }
-  function galStopAuto(){ if(galTimer){ clearInterval(galTimer); galTimer = null; } }
-  function galStartAuto(){
-    galStopAuto();
-    if(reduceMotion) return;
-    galTimer = setInterval(galAutoTick, GAL_AUTO_MS);
-  }
-
-  // Flechas: mueven y reinician el contador del automático
-  galPrev.addEventListener('click', () => { galGoPrev(); galStartAuto(); });
-  galNext.addEventListener('click', () => { galGoNext(); galStartAuto(); });
-
-  // Táctil / mouse: mientras el usuario arrastra se frena, al soltar se reanuda
-  galTrack.addEventListener('touchstart', galStopAuto, {passive:true});
-  galTrack.addEventListener('touchend', galStartAuto, {passive:true});
-  galTrack.addEventListener('touchcancel', galStartAuto, {passive:true});
-  galTrack.addEventListener('wheel', galStartAuto, {passive:true});
-
-  // Solo avanza sola cuando la galería está a la vista
-  if('IntersectionObserver' in window){
-    const galIo = new IntersectionObserver((entries) => {
-      entries.forEach(entry => { galVisible = entry.isIntersecting; });
-    }, {threshold:0.25});
-    galIo.observe(galBox);
-  } else { galVisible = true; }
+  galPrev.addEventListener('click', galGoPrev);
+  galNext.addEventListener('click', galGoNext);
 
   Promise.all(GALERIA.map(loadCategory)).then(results => {
     const frag = document.createDocumentFragment();
@@ -1022,7 +997,6 @@
       return;
     }
     galTrack.appendChild(frag);
-    galStartAuto();
   });
 
   const lightbox = document.getElementById('lightbox');
