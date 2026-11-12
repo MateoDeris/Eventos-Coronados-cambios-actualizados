@@ -147,8 +147,11 @@
     .hero{ min-height:92svh; }
     .hero-inner{ padding:110px 20px 80px; }
     .hero-content{ max-width:100%; transform:none; }
-    .hero-stats-mini{ gap:18px; flex-wrap:wrap; }
+    /* stats centrados en responsive */
+    .hero-stats-mini{ gap:22px; flex-wrap:wrap; justify-content:center; text-align:center; }
     .hero-desc{ max-width:100%; }
+    /* fondo del hero con menos zoom: la imagen ocupa menos alto y se funde con el negro de abajo */
+    .hero-video{ height:80%; bottom:auto; object-position:68% center; -webkit-mask-image:linear-gradient(180deg,#000 72%,transparent 100%); mask-image:linear-gradient(180deg,#000 72%,transparent 100%); }
     .hero-overlay{ background:linear-gradient(0deg, rgba(0,0,0,0.92) 12%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.15) 100%), linear-gradient(90deg, rgba(0,0,0,0.6), rgba(0,0,0,0.2)); }
   }
 
@@ -257,18 +260,25 @@
   .carousel-arrows.prev{ left:-30px; } 
   .carousel-arrows.next{ right:-30px; }
 
-  /* Controles inferiores: puntos (siempre) + flechas (solo celular) */
+  /* Flechas laterales del carrusel de servicios (en desktop el contenedor no afecta el layout) */
+  .carousel-side{ display:contents; }
+
+  /* Controles inferiores: solo puntos */
   .carousel-controls{ position:relative; z-index:2; display:flex; align-items:center; justify-content:center; gap:18px; margin-top:34px; }
   .carousel-dots{ position:relative; z-index:2; display:flex; justify-content:center; gap:8px; }
   .carousel-dots button{ width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,0.2); border:none; cursor:pointer; padding:0; }
   .carousel-dots button.active{ background:var(--gold-soft); box-shadow:0 0 8px 2px rgba(243,207,130,.6); }
-  .carousel-nav{ display:none; flex:0 0 auto; width:46px; height:46px; border-radius:50%; border:1px solid rgba(255,255,255,0.18); background:#000; color:var(--gold-soft); font-size:26px; font-weight:bold; line-height:1; cursor:pointer; align-items:center; justify-content:center; box-shadow:0 4px 14px rgba(0,0,0,0.7); transition:border-color .3s ease, color .3s ease, transform .2s ease; -webkit-tap-highlight-color:transparent; }
-  .carousel-nav:active{ transform:scale(.92); border-color:var(--gold); color:var(--gold); }
+
   @media (max-width:700px){
-    .carousel-arrows{ display:none; }
-    .carousel-nav{ display:flex; }
-    .carousel-controls{ gap:22px; margin-top:28px; }
-    .carousel-viewport{ overflow:hidden; }
+    /* overflow:clip recorta igual que hidden pero deja que las flechas queden fijas a media pantalla (sticky) */
+    .stage-club{ overflow:clip; }
+    .carousel-viewport{ overflow:hidden; overflow:clip; }
+    .carousel-controls{ margin-top:28px; }
+    /* flechas a los costados, a media altura de la pantalla (como en desktop) */
+    .carousel-side{ display:flex; position:sticky; top:calc(50vh - 18px); height:0; justify-content:space-between; align-items:flex-start; padding:0 4px; z-index:30; pointer-events:none; }
+    .carousel-side .carousel-arrows{ position:static; transform:none; width:36px; height:36px; font-size:22px; background:rgba(0,0,0,0.72); border:1px solid rgba(255,255,255,0.18); pointer-events:auto; -webkit-tap-highlight-color:transparent; }
+    .carousel-side .carousel-arrows:hover{ transform:none; box-shadow:0 4px 14px rgba(0,0,0,0.8); }
+    .carousel-side .carousel-arrows:active{ transform:scale(.92); color:var(--gold); border-color:var(--gold); }
   }
 
   /* Carrusel "estilo boliche": sin dorado ambiental, acentos RGB, listo para imagen de fondo */
@@ -553,8 +563,11 @@
     </div>
 
     <div class="carousel-viewport">
-      <button class="carousel-arrows prev js-car-prev" id="carPrev" aria-label="Anterior">‹</button>
-      <button class="carousel-arrows next js-car-next" id="carNext" aria-label="Siguiente">›</button>
+      <!-- Flechas: laterales en desktop, a media pantalla en celular -->
+      <div class="carousel-side">
+        <button class="carousel-arrows prev js-car-prev" id="carPrev" aria-label="Anterior">‹</button>
+        <button class="carousel-arrows next js-car-next" id="carNext" aria-label="Siguiente">›</button>
+      </div>
 
       <div class="carousel-track" id="carouselTrack">
 
@@ -636,11 +649,9 @@
       </div>
     </div>
 
-    <!-- Controles: puntos en todos los dispositivos + flechas en celular -->
+    <!-- Puntos de navegación -->
     <div class="carousel-controls">
-      <button class="carousel-nav js-car-prev" aria-label="Anterior">‹</button>
       <div class="carousel-dots" id="carouselDots"></div>
-      <button class="carousel-nav js-car-next" aria-label="Siguiente">›</button>
     </div>
   </div>
 </section>
@@ -881,7 +892,7 @@
     dots.forEach((d,i) => d.classList.toggle('active', i === current));
   }
   tabs.forEach(t => t.addEventListener('click', () => goTo(parseInt(t.dataset.slide,10))));
-  // flechas de desktop (laterales) y de celular (abajo)
+  // flechas laterales (desktop y celular)
   document.querySelectorAll('.js-car-prev').forEach(b => b.addEventListener('click', () => goTo(current - 1)));
   document.querySelectorAll('.js-car-next').forEach(b => b.addEventListener('click', () => goTo(current + 1)));
 
